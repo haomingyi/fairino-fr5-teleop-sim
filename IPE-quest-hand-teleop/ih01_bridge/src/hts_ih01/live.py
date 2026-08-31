@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 from contextlib import ExitStack
+from pathlib import Path
 import socket
 import time
 from typing import Any
@@ -126,7 +127,7 @@ def _state(frame: HandFrame, result: RetargetResult) -> dict[str, Any]:
 def _panel(*, source: TcpSource, side: str,
            results: dict[str, RetargetResult], bridge: Any,
            hardware_state: Any, follow_speed: int, speed: int,
-           fps: float) -> np.ndarray:
+           fps: float, calibration_status: str) -> np.ndarray:
     """Restore the previous QUEST 3 -> IH01 dashboard appearance."""
     canvas = np.full((PANEL_HEIGHT, PANEL_WIDTH, 3), (25, 29, 36), np.uint8)
     connected = source.connections != {}
@@ -150,7 +151,7 @@ def _panel(*, source: TcpSource, side: str,
         msg = "SIMULATION ONLY - no hardware command"
     cv2.putText(canvas, msg[-95:], (28, 158), cv2.FONT_HERSHEY_SIMPLEX,
                 0.48, (210, 215, 225), 1, cv2.LINE_AA)
-    cv2.putText(canvas, "HTS geometric mapping | per-channel target output",
+    cv2.putText(canvas, f"HTS fused geometry | {calibration_status}",
                 (28, 184), cv2.FONT_HERSHEY_SIMPLEX, 0.43, (170, 205, 180), 1, cv2.LINE_AA)
     def draw_result(result_side: str, result: RetargetResult | None, x: int, width: int) -> None:
         heading_color = (100, 230, 150) if result is not None else (135, 145, 160)
@@ -197,9 +198,9 @@ def _panel(*, source: TcpSource, side: str,
         cv2.putText(canvas, f"EtherCAT {hardware_state.state} WKC {hardware_state.wkc}/{hardware_state.expected_wkc}",
                     (600, 158), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (100, 225, 140) if hardware_state.state == "OP" else (80, 170, 255), 1, cv2.LINE_AA)
-    controls = ("E arm/disarm | SPACE pause | R clear fault | Q quit"
+    controls = ("O open | F fist | K clear calibration | E arm/disarm | SPACE pause | Q quit"
                 if bridge is not None else
-                "L/R/B switch simulated hand | Q quit")
+                "O open | F fist | K clear calibration | L/R/B switch hand | Q quit")
     cv2.putText(canvas, controls, (28, 675), cv2.FONT_HERSHEY_SIMPLEX,
                 0.48, (120, 200, 255), 1, cv2.LINE_AA)
     # Native OpenCV/Qt trackbar captions become white-on-white with some Linux
@@ -236,7 +237,8 @@ def main() -> int:
     # The hardware workflow always keeps a read-only MuJoCo mirror open.
     args.simulate = bool(args.simulate or args.hardware)
     source = TcpSource(args.host, args.port)
-    retargeter = InitialRetargeter()
+    calibration_path = Path(__file__).resolve().parents[3] / "calibration" / "quest_hand_personal.json"
+    retargeter = InitialRetargeter(calibration_path)
     latest_states: dict[str, dict[str, Any]] = {}
     latest_results: dict[str, RetargetResult] = {}
     latest_time: dict[str, float] = {}
@@ -396,7 +398,8 @@ def main() -> int:
                                           results=latest_results,
                                           bridge=bridge, hardware_state=hardware_state,
                                           follow_speed=current_follow_speed[0],
-                                          speed=current_speed[0], fps=fps))
+                                          speed=current_speed[0], fps=fps,
+                                          calibration_status=retargeter.calibration_status(selected_side[0])))
                 key = cv2.waitKey(1) & 0xFF
                 if key in (27, ord("q")):
                     break
@@ -404,6 +407,16 @@ def main() -> int:
                     selected_side[0] = {ord("l"): "left", ord("r"): "right", ord("b"): "both"}[key]
                     cv2.setTrackbarPos("HAND MODE 0=LEFT 1=RIGHT 2=BOTH", window,
                                        side_index[selected_side[0]])
+                calibration_sides = (
+                    ("left", "right") if selected_side[0] == "both"
+                    else (selected_side[0],)
+                )
+                if key in (ord("o"), ord("O")):
+                    print(retargeter.capture_pose("open", calibration_sides), flush=True)
+                elif key in (ord("f"), ord("F")):
+                    print(retargeter.capture_pose("fist", calibration_sides), flush=True)
+                elif key in (ord("k"), ord("K")):
+                    print(retargeter.clear_calibration(calibration_sides), flush=True)
                 # Accept both keyboard cases; the UI documents the safety
                 # action as `E`, while OpenCV returns the actual ASCII code.
                 if bridge is not None and key in (ord("e"), ord("E")):

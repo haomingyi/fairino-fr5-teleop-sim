@@ -104,6 +104,12 @@ make wired-hardware
 实时显示当前值与最大值。电机速度也可用启动参数设置：
 `IH01_TELEOP_SPEED_STEPS_S=1000 make wired-hardware SIDE=left`。
 
+默认固定映射融合关节弯曲角和指尖向指根/掌心的收拢程度。个人标定不依赖 V2：保持手掌
+完全张开约 0.5 秒后按 `O`，保持自然握拳约 0.5 秒后按 `F`。界面显示 `R:6/6` 或
+`L:6/6` 代表六通道有效；无效通道自动使用固定映射。`K` 清除当前手标定。标定文件仅保存
+在本机 `calibration/quest_hand_personal.json` 并被 Git 忽略。应在 `DISARMED` 仿真状态完成
+标定和目标条检查，再按 `E` 启用实体输出。
+
 ### 手动控制台（不依赖 Quest）
 
 ```bash

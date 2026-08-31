@@ -12,6 +12,7 @@ config/soft_zero.yaml
 IPE-quest-hand-teleop/.venv/
 IPE-quest-hand-teleop/build/
 IPE-quest-hand-teleop/artifacts/
+IPE-quest-hand-teleop/calibration/quest_hand_personal.json
 IPE-quest-hand-teleop/hand_tracking_streamer.apk
 IPE-quest-hand-teleop/hand_tracking_streamer/Library/
 IPE-quest-hand-teleop/hand_tracking_streamer/Temp/
