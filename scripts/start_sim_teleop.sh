@@ -7,7 +7,7 @@ project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 quest_dir="${project_dir}/IPE-quest-hand-teleop"
 port="${PORT:-8000}"
 side="${SIDE:-right}"
-app_id="${APP_ID:-com.wengmister.handtrackingstreamer}"
+app_id="${APP_ID:-com.haoming.ipe.handteleop}"
 
 [[ -d "${quest_dir}" ]] || { echo "FAIL: missing IPE Quest Hand Teleop project" >&2; exit 2; }
 case "${side}" in

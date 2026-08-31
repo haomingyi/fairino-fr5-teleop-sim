@@ -50,9 +50,9 @@ make install       # 将新 APK 安装到 Quest 3
 make reverse       # 建立 localhost:8000 通道
 ```
 
-`make unity-build` 需要本机已安装 Unity 6；它不会自动安装到头显。当前仓库随附 APK 的包名
-是 `com.wengmister.handtrackingstreamer`，直接运行 `make install` 即可使用；Unity 重新构建
-后若改用了其他包名，需要同步设置 `APP_ID` 后再启动遥操。
+`make unity-build` 需要本机已安装 Unity 6；它不会自动安装到头显。Unity 构建脚本固定写入
+项目包名 `com.haoming.ipe.handteleop`，构建后直接运行 `make install`，启动脚本会使用同一包名。
+旧的 `com.wengmister.handtrackingstreamer` 仅属于历史 APK，不应与新构建混用。
 
 如果头显应用库里看不到程序，请在 Quest 3 的应用库筛选器中选择“未知来源（Unknown Sources）”。
 
