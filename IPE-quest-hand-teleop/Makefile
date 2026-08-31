@@ -13,7 +13,7 @@ PYTHONPATH_LOCAL := $(RUNTIME_SRC):$(BRIDGE_SRC)
 SIDE ?=
 PORT ?= 8000
 HOST ?= 0.0.0.0
-APP_ID ?= com.haoming.ipe.handteleop
+APP_ID ?= com.wengmister.handtrackingstreamer
 # Keep the distributable APK beside this Makefile so the portable folder can
 # be copied to another workstation without relying on Unity's generated tree.
 HTS_APK ?= $(CURDIR)/hand_tracking_streamer.apk

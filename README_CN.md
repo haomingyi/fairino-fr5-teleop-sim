@@ -47,11 +47,13 @@ make reverse     # 建立 TCP 端口转发，不会再次安装 APK
 开发者模式已开启并重启一次，然后在电脑执行：
 
 ```bash
-adb shell pm list packages | grep com.haoming.ipe.handteleop
-adb shell cmd package resolve-activity --brief -c android.intent.category.LAUNCHER com.haoming.ipe.handteleop
+adb shell pm list packages | grep com.wengmister.handtrackingstreamer
+adb shell cmd package resolve-activity --brief -c android.intent.category.LAUNCHER com.wengmister.handtrackingstreamer
 ```
 
-第一条应返回 `package:com.haoming.ipe.handteleop`，第二条应返回可启动的 Unity Activity。
+当前随仓库提供的 APK 包名为 `com.wengmister.handtrackingstreamer`；第一条应返回该包名，
+第二条应返回可启动的 Unity Activity。若以后用 Unity 重新构建并采用项目配置中的包名，
+可通过 `APP_ID=...` 覆盖启动包名。
 
 ## 项目结构
 

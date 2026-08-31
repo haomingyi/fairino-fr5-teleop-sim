@@ -1,7 +1,7 @@
 # IPE Quest Hand Teleop
 
 可移植的 Quest 3 手势遥操应用。它保留 Hand Tracking Streamer 的 OpenXR 手部数据协议，
-但使用本项目自己的应用身份 `com.haoming.ipe.handteleop`；Quest 端、TCP 接收器、MuJoCo
+当前随仓库提供的 APK 使用上游应用身份 `com.wengmister.handtrackingstreamer`；Quest 端、TCP 接收器、MuJoCo
 和 IH01 EtherCAT 后端都在本目录内。作者：haoming。
 
 本目录与 `../quest3-hand-tracking/` 分开维护。复制本目录到另一台 Linux 电脑后重新执行

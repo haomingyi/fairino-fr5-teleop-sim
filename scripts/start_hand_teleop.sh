@@ -5,7 +5,7 @@ project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 quest_dir="${project_dir}/IPE-quest-hand-teleop"
 port="${PORT:-8000}"
 side="${SIDE:-right}"
-app_id="${APP_ID:-com.haoming.ipe.handteleop}"
+app_id="${APP_ID:-com.wengmister.handtrackingstreamer}"
 
 if [[ -z "${SIDE:-}" && -t 0 ]]; then
   printf '选择 Quest 映射手 [right=右手, left=左手, both=双手] (默认 right): '
