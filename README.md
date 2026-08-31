@@ -67,11 +67,9 @@ Quest target, simulated IH01 position, Cartesian error and IK error. Its
 manual-hand button asks again for confirmation and then delegates to the
 preserved IH01 console.
 
-For a hand-only Quest test, use `make hand-sim`; it prompts for right, left, or
-both hands and reuses the original `IPE-quest-hand-teleop` MuJoCo simulation:
-fingers follow landmarks and the wrist follows Quest position/orientation. It
-does not load the FR5 model or any arm SDK. `make hand-control` remains the
-separate physical IH01 manual-control command.
+For hand teleoperation, use `make hand-teleop`; it opens the IH01 simulation
+mirror, prompts for the hand, and keeps the physical output disarmed until `E`
+is pressed. `make hand-control` remains the separate manual-control command.
 
 For Quest-to-physical-IH01 teleoperation, use `make hand-teleop`. It prompts
 for the connected hand and keeps output disarmed until `E` is pressed.

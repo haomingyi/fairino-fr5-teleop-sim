@@ -75,7 +75,6 @@ make setup         # 首次安装依赖
 make check         # 无硬件自检
 make arm-sim       # 单独仿真，默认手动关节模式
 make arm-teleop    # Quest + 联合仿真
-make hand-sim      # Quest + IH01 纯灵巧手仿真，不启动 FR5
 make hand-teleop  # Quest + 实体 IH01（启动时选择手）
 make ui            # 图形控制台与实时数据
 make hand-control  # 保留的 IH01 实体手动控制台
@@ -83,7 +82,9 @@ make hand-control  # 保留的 IH01 实体手动控制台
 
 `make arm-sim` 默认不再自动挪动，窗口中按 `q/a`、`w/s`、`e/d`、`r/f`、`t/g`、`y/h` 正反转动 J1～J6，`0` 回到初始姿态，`o/c` 控制手指开合，`Space` 暂停/继续。终端每 0.5 秒显示六轴角度和 IH01 末端位置。`make ui` 中可以启动或停止仿真、启动 Quest 联动、查看 Quest 映射目标、IH01 仿真位置、末端位置误差和数值 IK 误差。
 
-如果只想测试灵巧手遥操，使用 `make hand-sim`，启动时选择右手、左手或双手。该命令复用 `IPE-quest-hand-teleop` 的原有 IH01 仿真：手指跟随关键点，手腕位置和姿态跟随 Quest，并限制在合理显示工作空间内（尤其避免落到地面以下），不加载 FR5 或任何机械臂 SDK；`make hand-control` 则仍是实体 IH01 手动控制命令。
+灵巧手遥操统一使用 `make hand-teleop`，启动后进入 IH01 仿真镜像并选择右手、左手或双手；
+仿真会限制在合理显示工作空间内（尤其避免落到地面以下）。窗口中的 `E` 键才会请求启用
+实体 IH01 输出；`make hand-control` 则仍是实体 IH01 手动控制命令。
 
 需要把 Quest 遥操接到实体 IH01 时，使用明确的硬件入口 `make hand-teleop`，启动时选择
 右手或左手。窗口启动后默认未启用输出，按 `E` 才会启用/停用目标发送；`Space`

@@ -338,14 +338,13 @@ def main() -> int:
                     active_slider[0] = None
 
             cv2.setMouseCallback(window, _mouse)
-            if not args.hardware:
-                def _side_changed(value: int) -> None:
-                    selected_side[0] = side_names[max(0, min(2, int(value)))]
+            def _side_changed(value: int) -> None:
+                selected_side[0] = side_names[max(0, min(2, int(value)))]
 
-                cv2.createTrackbar(
-                    "HAND MODE 0=LEFT 1=RIGHT 2=BOTH", window,
-                    side_index[args.side], 2, _side_changed,
-                )
+            cv2.createTrackbar(
+                "HAND MODE 0=LEFT 1=RIGHT 2=BOTH", window,
+                side_index[args.side], 2, _side_changed,
+            )
             while viewer is None or viewer.is_running():
                 now = time.monotonic()
                 for frame in source.poll():
@@ -399,7 +398,7 @@ def main() -> int:
                 key = cv2.waitKey(1) & 0xFF
                 if key in (27, ord("q")):
                     break
-                if not args.hardware and key in (ord("l"), ord("r"), ord("b")):
+                if key in (ord("l"), ord("r"), ord("b")):
                     selected_side[0] = {ord("l"): "left", ord("r"): "right", ord("b"): "both"}[key]
                     cv2.setTrackbarPos("HAND MODE 0=LEFT 1=RIGHT 2=BOTH", window,
                                        side_index[selected_side[0]])
