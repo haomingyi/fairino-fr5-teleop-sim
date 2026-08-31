@@ -82,7 +82,7 @@ make hand-control  # 保留的 IH01 实体手动控制台
 
 `make arm-sim` 默认不再自动挪动，窗口中按 `q/a`、`w/s`、`e/d`、`r/f`、`t/g`、`y/h` 正反转动 J1～J6，`0` 回到初始姿态，`o/c` 控制手指开合，`Space` 暂停/继续。终端每 0.5 秒显示六轴角度和 IH01 末端位置。`make ui` 中可以启动或停止仿真、启动 Quest 联动、查看 Quest 映射目标、IH01 仿真位置、末端位置误差和数值 IK 误差。
 
-如果只想测试灵巧手遥操，使用 `make hand-sim SIDE=right`（也支持 `left`、`both`）。该命令复用 `IPE-quest-hand-teleop` 的原有 IH01 仿真：手指跟随关键点，手腕位置和姿态跟随 Quest，不加载 FR5 或任何机械臂 SDK；`make hand-control` 则仍是实体 IH01 手动控制命令。
+如果只想测试灵巧手遥操，使用 `make hand-sim SIDE=right`（也支持 `left`、`both`）。该命令复用 `IPE-quest-hand-teleop` 的原有 IH01 仿真：手指跟随关键点，手腕位置和姿态跟随 Quest，并限制在合理显示工作空间内（尤其避免落到地面以下），不加载 FR5 或任何机械臂 SDK；`make hand-control` 则仍是实体 IH01 手动控制命令。
 
 实体手控采用逐通道接触保护：电流达到 1000 mA，或位置堵转持续 200 ms，该通道保持当前位置；
 将该通道目标松开/回退后立即释放。hand-control 默认不启用拇指–食指耦合软限位，也不叠加

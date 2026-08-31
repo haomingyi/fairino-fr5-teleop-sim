@@ -169,8 +169,15 @@ class IH01Simulation:
             reference = self._wrist_references_m.setdefault(handedness, wrist.copy())
             # HTS wrist coordinates are already metric. Anchor the first
             # tracked frame to the authored hand mount, then follow Quest
-            # translation 1:1 with a conservative visual workspace limit.
-            offset = np.clip(wrist - reference, -0.22, 0.22)
+            # Translation follows the Quest wrist inside a display workspace.
+            # Use asymmetric vertical limits because the authored hand bases
+            # sit just above the MuJoCo floor; a symmetric +/-22 cm clamp lets
+            # either hand disappear below the ground plane.
+            offset = np.clip(
+                wrist - reference,
+                np.array((-0.22, -0.18, -0.04), dtype=np.float64),
+                np.array((0.22, 0.18, 0.20), dtype=np.float64),
+            )
             self.data.mocap_pos[mocap_id] = self._mocap_base_positions[handedness] + offset
         elif not self.fixed_wrist and "palm_position_xy" in state:
             image_x, image_y = state["palm_position_xy"]
@@ -186,7 +193,7 @@ class IH01Simulation:
                 # Real depth is metric; the reduced visualization gain keeps
                 # both URDF-derived hands inside their side-by-side workspaces.
                 offset_z = float(
-                    np.clip((reference - depth_m) * 0.25, -0.080, 0.080)
+                    np.clip((reference - depth_m) * 0.25, -0.04, 0.12)
                 )
             self.data.mocap_pos[mocap_id] = base + (
                 offset_x,
