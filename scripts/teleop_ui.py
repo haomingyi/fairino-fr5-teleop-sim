@@ -34,6 +34,7 @@ class TeleopUi(tk.Tk):
         self.mapping_mode = tk.StringVar(value="right")
         self._build()
         self.after(100, self._drain)
+        self.after(60_000, self._refresh_sudo_ticket)
         self.protocol("WM_DELETE_WINDOW", self._close)
 
     def _build(self) -> None:
@@ -85,7 +86,10 @@ class TeleopUi(tk.Tk):
         env["SIDE"] = side
         self.process = subprocess.Popen(["make", target], cwd=ROOT, env=env, text=True,
                                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                        start_new_session=True)
+                                        # Give Stop/E-stop a dedicated process group while
+                                        # retaining the terminal that owns the sudo ticket
+                                        # established by `make ui`.
+                                        process_group=0)
         threading.Thread(target=self._read_output, daemon=True).start()
 
     def _read_output(self) -> None:
@@ -117,6 +121,12 @@ class TeleopUi(tk.Tk):
 
     def _append(self, line: str) -> None:
         self.log.configure(state=tk.NORMAL); self.log.insert(tk.END, line); self.log.see(tk.END); self.log.configure(state=tk.DISABLED)
+
+    def _refresh_sudo_ticket(self) -> None:
+        """Keep the one terminal authentication valid for this UI session."""
+        subprocess.run(["sudo", "-n", "-v"], check=False,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        self.after(60_000, self._refresh_sudo_ticket)
 
     def _stop(self) -> None:
         if self.process is not None and self.process.poll() is None:

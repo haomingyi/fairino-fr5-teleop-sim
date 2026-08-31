@@ -65,7 +65,13 @@ launch: status
 	@if adb shell pidof "$(APP_ID)" | grep -q '[0-9]'; then \
 		echo "PASS: Quest app already running; keeping existing session"; \
 	else \
-		adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p "$(APP_ID)"; \
+		component="$$(adb shell cmd package resolve-activity --brief \
+			-a android.intent.action.MAIN -c android.intent.category.LAUNCHER "$(APP_ID)" \
+			| tr -d '\r' | tail -n 1)"; \
+		case "$$component" in */*) ;; \
+			*) echo "FAIL: no launcher activity found for $(APP_ID)" >&2; exit 3;; \
+		esac; \
+		adb shell am start -n "$$component"; \
 	fi
 
 receive:
