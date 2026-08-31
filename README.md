@@ -71,8 +71,10 @@ For hand teleoperation, use `make hand-teleop`; it opens the IH01 simulation
 mirror, prompts for the hand, and keeps the physical output disarmed until `E`
 is pressed. `make hand-control` remains the separate manual-control command.
 
-For Quest-to-physical-IH01 teleoperation, use `make hand-teleop`. It prompts
-for the connected hand and keeps output disarmed until `E` is pressed.
+For Quest-to-physical-IH01 teleoperation, use `make hand-teleop`. It prepares the
+computer-side receiver and keeps output disarmed until `E` is pressed; start the
+Quest app manually in the headset to preserve its tracking origin. `make launch`
+remains available when ADB auto-launch is explicitly desired.
 
 ### Installing on a new Quest 3
 

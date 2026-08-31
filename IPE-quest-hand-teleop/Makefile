@@ -31,7 +31,8 @@ help:
 	@echo "  make check                         protocol/bridge tests"
 	@echo "  make status                        Quest ADB authorization"
 	@echo "  make unity-build                   build the IH01-owned APK"
-	@echo "  make install reverse launch        install and start the IH01 app (wired)"
+	@echo "  make install reverse               install APK and prepare wired transport"
+	@echo "  make launch                        optionally start the Quest app via ADB"
 	@echo "  make wireless-connect QUEST_IP=x   switch ADB to Wi-Fi"
 	@echo "  make sim SIDE=left|right|both      HTS -> MuJoCo, read-only (default left)"
 	@echo "  make wired-sim                    wired Quest + MuJoCo; prompts for hand"
@@ -82,12 +83,12 @@ sim:
 	@$(PYTHON) --version >/dev/null || (echo "Run 'make bootstrap' first."; exit 127)
 	PYTHONPATH="$(PYTHONPATH_LOCAL)" $(PYTHON) -m hts_ih01.live --host "$(HOST)" --port "$(PORT)" --side "$(if $(SIDE),$(SIDE),left)" --simulate
 
-wired-sim: install reverse launch
+wired-sim: install reverse
 	@side="$$(bash scripts/select_side.sh "$(SIDE)")" || exit $$?; \
 	  echo "Selected hand: $$side"; \
 	  $(MAKE) sim SIDE="$$side" HOST="$(HOST)" PORT="$(PORT)"
 
-wireless-sim: launch
+wireless-sim: status
 	@side="$$(bash scripts/select_side.sh "$(SIDE)")" || exit $$?; \
 	  echo "Selected hand: $$side"; \
 	  $(MAKE) sim SIDE="$$side" HOST="$(HOST)" PORT="$(PORT)"
@@ -102,12 +103,12 @@ hardware:
 	@sudo -v
 	PYTHONPATH="$(PYTHONPATH_LOCAL)" $(PYTHON) -m hts_ih01.live --host "$(HOST)" --port "$(PORT)" --side "$(SIDE)" --hardware --interface "$(IH01_INTERFACE)" --slave "$(IH01_SLAVE)" --speed "$(IH01_TELEOP_SPEED_STEPS_S)" --backend "$(PROJECT)/build/ih01_hand_control_backend"
 
-wired-hardware: install reverse launch
+wired-hardware: install reverse
 	@side="$$(bash scripts/select_side.sh "$(SIDE)")" || exit $$?; \
 	case "$$side" in both) echo 'Hardware mode supports one connected hand; choose left or right.' >&2; exit 64;; esac; \
 	$(MAKE) hardware SIDE="$$side" HOST="$(HOST)" PORT="$(PORT)"
 
-wireless-hardware: launch
+wireless-hardware: status
 	@side="$$(bash scripts/select_side.sh "$(SIDE)")" || exit $$?; \
 	case "$$side" in both) echo 'Hardware mode supports one connected hand; choose left or right.' >&2; exit 64;; esac; \
 	$(MAKE) hardware SIDE="$$side" HOST="$(HOST)" PORT="$(PORT)"

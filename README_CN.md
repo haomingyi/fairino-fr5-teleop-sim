@@ -75,7 +75,7 @@ make setup         # 首次安装依赖
 make check         # 无硬件自检
 make arm-sim       # 单独仿真，默认手动关节模式
 make arm-teleop    # Quest + 联合仿真
-make hand-teleop  # Quest + 实体 IH01（启动时选择手）
+make hand-teleop  # 启动电脑端 Quest + 实体 IH01 接收窗口
 make ui            # 图形控制台与实时数据（启动前验证一次 sudo）
 make hand-control  # 保留的 IH01 实体手动控制台
 ```
@@ -87,7 +87,8 @@ make hand-control  # 保留的 IH01 实体手动控制台
 实体 IH01 输出；`make hand-control` 则仍是实体 IH01 手动控制命令。
 
 需要把 Quest 遥操接到实体 IH01 时，使用明确的硬件入口 `make hand-teleop`，启动时选择
-右手或左手。窗口启动后默认未启用输出，按 `E` 才会启用/停用目标发送；`Space`
+右手或左手。该命令只在电脑端安装 APK、建立 USB 通道并打开接收窗口，不会自动启动 Quest
+应用；请在头显应用库中手动打开应用，并选择 TCP Wired / localhost / 8000。窗口启动后默认未启用输出，按 `E` 才会启用/停用目标发送；`Space`
 暂停，`R` 清故障，`Q` 退出。该入口会经过 EtherCAT 与人工确认流程；未接实体手时，按
 `E` 会在界面显示未检测到实体 IH01，并保持仿真运行。进入后可用 HAND MODE 控件或
 `l`、`r`、`b` 切换仿真显示手。

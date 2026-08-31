@@ -45,12 +45,13 @@ Quest 应用内选择 Left、Right 或 Both。电脑端 `SIDE` 只使用 `left`�
 USB 连接 Quest、解锁并允许 USB 调试后：
 
 ```bash
-make wired-sim                 # 启动时选择 left/right/both
+make wired-sim                 # 启动电脑端仿真，Quest 应用手动打开
 ```
 
-该命令依次安装 APK、建立 ADB reverse、启动应用，再打开 MuJoCo 接收器；不发送 EtherCAT
-命令。Quest 网络设置为 **TCP Wired / localhost / 8000**。需要分步调试时使用：
-`make install`、`make reverse`、`make launch`、`make sim SIDE=left`。
+该命令依次安装 APK、建立 ADB reverse，再打开 MuJoCo 接收器；不会通过 ADB 强制启动应用，
+也不发送 EtherCAT 命令。请在 Quest 3 中手动打开应用，网络设置为 **TCP Wired / localhost / 8000**。
+需要自动启动头显应用时才单独运行 `make launch`；分步调试可使用 `make install`、`make reverse`、
+`make sim SIDE=left`。
 
 仿真窗口中的 IH01 手腕会跟随 Quest 的首帧锚定后位置和姿态移动，手指继续由 21 个关键点
 重定向；这只影响 MuJoCo 仿真，不改变实体 IH01 的固定安装和硬件控制路径。
