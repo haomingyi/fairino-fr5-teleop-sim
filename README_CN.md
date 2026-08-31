@@ -42,7 +42,7 @@ make reverse     # 建立 TCP 端口转发，不会再次安装 APK
 
 看到 `Success` 和 `PASS: installed ... APK` 即表示安装完成；看到 `PASS: Quest localhost:8000 -> PC localhost:8000` 即表示通道建立成功。换另一台 Quest 3 时重复上述安装步骤即可。
 
-如果需要重新生成 APK（例如修改 Unity 工程），使用：
+如果修改了 Unity 工程，需要重新生成 APK：
 
 ```bash
 make unity-build   # 仅用 Unity 构建并更新本地 APK
@@ -50,9 +50,8 @@ make install       # 将新 APK 安装到 Quest 3
 make reverse       # 建立 localhost:8000 通道
 ```
 
-`make unity-build` 需要本机已安装 Unity 6；它不会自动安装到头显。Unity 构建脚本固定写入
-项目包名 `com.haoming.ipe.handteleop`，构建后直接运行 `make install`，启动脚本会使用同一包名。
-旧的 `com.wengmister.handtrackingstreamer` 仅属于历史 APK，不应与新构建混用。
+`make unity-build` 需要本机安装 Unity 6；构建完成后再执行 `make install`。当前应用包名为
+`com.haoming.ipe.handteleop`，无需手动配置。
 
 如果头显应用库里看不到程序，请在 Quest 3 的应用库筛选器中选择“未知来源（Unknown Sources）”。
 
