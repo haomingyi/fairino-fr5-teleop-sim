@@ -43,6 +43,7 @@ hand-teleop hand-hardware:
 
 ui:
 	@echo "正在验证实体灵巧手所需的 sudo 权限（本次 UI 会话只验证一次）..."
+	@sudo -k
 	@sudo -v
 	$(PYTHON) scripts/teleop_ui.py
 
