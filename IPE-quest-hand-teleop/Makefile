@@ -62,8 +62,11 @@ wireless-connect:
 	bash scripts/connect_quest_wifi.sh "$(QUEST_IP)"
 
 launch: status
-	adb shell am force-stop "$(APP_ID)"
-	adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p "$(APP_ID)"
+	@if adb shell pidof "$(APP_ID)" | grep -q '[0-9]'; then \
+		echo "PASS: Quest app already running; keeping existing session"; \
+	else \
+		adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p "$(APP_ID)"; \
+	fi
 
 receive:
 	@$(PYTHON) --version >/dev/null || (echo "Run 'make bootstrap' first."; exit 127)

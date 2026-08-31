@@ -28,8 +28,11 @@ esac
 
 bash "${quest_dir}/scripts/check_quest.sh"
 adb reverse "tcp:${port}" "tcp:${port}"
-adb shell am force-stop "${app_id}"
-adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p "${app_id}" >/dev/null
+if adb shell pidof "${app_id}" | grep -q '[0-9]'; then
+  echo "PASS: Quest app already running; keeping existing session."
+else
+  adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p "${app_id}" >/dev/null
+fi
 echo "PASS: Quest 3 -> MuJoCo IH01 simulation only; no physical-hand connection; SIDE=${side}."
 
 exec make -C "${quest_dir}" sim SIDE="${side}" HOST=127.0.0.1 PORT="${port}"

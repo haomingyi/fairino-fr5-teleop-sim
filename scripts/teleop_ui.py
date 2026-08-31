@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import queue
+import signal
 import subprocess
 import threading
 import tkinter as tk
@@ -54,6 +55,8 @@ class TeleopUi(tk.Tk):
         ttk.Button(buttons, text="机械臂 Quest 联动", command=lambda: self._start("arm-teleop")).pack(side=tk.LEFT, padx=6)
         ttk.Button(buttons, text="灵巧手 Quest 遥操", command=lambda: self._start("hand-teleop")).pack(side=tk.LEFT, padx=6)
         ttk.Button(buttons, text="停止", command=self._stop).pack(side=tk.LEFT, padx=6)
+        tk.Button(buttons, text="急停", command=self._estop, bg="#b3261e", fg="white",
+                  activebackground="#7f1d1d", activeforeground="white", width=7).pack(side=tk.LEFT, padx=6)
         ttk.Button(buttons, text="检查", command=lambda: self._start("check")).pack(side=tk.LEFT, padx=6)
         ttk.Button(buttons, text="灵巧手手动控制", command=self._hand_control).pack(side=tk.RIGHT)
 
@@ -81,7 +84,8 @@ class TeleopUi(tk.Tk):
         env = dict(os.environ)
         env["SIDE"] = side
         self.process = subprocess.Popen(["make", target], cwd=ROOT, env=env, text=True,
-                                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                        start_new_session=True)
         threading.Thread(target=self._read_output, daemon=True).start()
 
     def _read_output(self) -> None:
@@ -116,7 +120,16 @@ class TeleopUi(tk.Tk):
 
     def _stop(self) -> None:
         if self.process is not None and self.process.poll() is None:
-            self.process.terminate(); self.state.set("正在停止…")
+            os.killpg(self.process.pid, signal.SIGTERM); self.state.set("正在停止…")
+
+    def _estop(self) -> None:
+        """Stop the active process and make the safety action unmistakable."""
+        if self.process is not None and self.process.poll() is None:
+            os.killpg(self.process.pid, signal.SIGINT)
+            self.state.set("急停已触发：输出已停止")
+            self._append("[EMERGENCY STOP] process interrupted; hardware output disarmed\n")
+        else:
+            self.state.set("急停已触发：当前无运行任务")
 
     def _hand_control(self) -> None:
         if messagebox.askyesno("确认", "将启动 IH01 EtherCAT 手动控制台。确认急停可用且只连接预期从站？"):
