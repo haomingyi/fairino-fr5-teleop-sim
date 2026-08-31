@@ -63,7 +63,7 @@ wireless-connect:
 
 launch: status
 	adb shell am force-stop "$(APP_ID)"
-	adb shell monkey -p "$(APP_ID)" -c android.intent.category.LAUNCHER 1
+	adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p "$(APP_ID)"
 
 receive:
 	@$(PYTHON) --version >/dev/null || (echo "Run 'make bootstrap' first."; exit 127)
