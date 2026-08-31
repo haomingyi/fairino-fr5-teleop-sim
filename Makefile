@@ -42,6 +42,8 @@ hand-teleop hand-hardware:
 	$(MAKE) -C IPE-quest-hand-teleop wired-hardware $(if $(filter command line override,$(origin SIDE)),SIDE="$(SIDE)")
 
 ui:
+	@echo "正在验证实体灵巧手所需的 sudo 权限（本次 UI 会话只验证一次）..."
+	@sudo -v
 	$(PYTHON) scripts/teleop_ui.py
 
 hand-control:

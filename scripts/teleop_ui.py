@@ -14,7 +14,7 @@ import signal
 import subprocess
 import threading
 import tkinter as tk
-from tkinter import messagebox, simpledialog, ttk
+from tkinter import messagebox, ttk
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -76,8 +76,6 @@ class TeleopUi(tk.Tk):
         if self.process is not None and self.process.poll() is None:
             messagebox.showinfo("正在运行", "请先停止当前任务。")
             return
-        if target == "hand-teleop" and not self._ensure_sudo():
-            return
         side = self.mapping_mode.get()
         self._append(f"> make {target}  [映射={side}]\n")
         self.state.set("启动中…")
@@ -89,30 +87,6 @@ class TeleopUi(tk.Tk):
                                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                         start_new_session=True)
         threading.Thread(target=self._read_output, daemon=True).start()
-
-    def _ensure_sudo(self) -> bool:
-        """Refresh sudo credentials once for the hardware teleop launch."""
-        password = simpledialog.askstring(
-            "需要 sudo 权限",
-            "启动实体灵巧手遥操需要 sudo 权限。请输入本机密码（不会保存）：",
-            show="*",
-            parent=self,
-        )
-        if password is None:
-            return False
-        result = subprocess.run(
-            ["sudo", "-S", "-v"],
-            input=password + "\n",
-            text=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.PIPE,
-            check=False,
-        )
-        if result.returncode != 0:
-            messagebox.showerror("sudo 认证失败", "密码错误或当前用户没有 sudo 权限。")
-            return False
-        self._append("[sudo] credentials refreshed; hardware launch authorized\n")
-        return True
 
     def _read_output(self) -> None:
         assert self.process is not None and self.process.stdout is not None
