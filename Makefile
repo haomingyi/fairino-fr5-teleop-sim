@@ -7,7 +7,7 @@ SIDE ?= right
 PORT ?= 8000
 LISTEN ?= 0
 
-.PHONY: help setup check arm-sim arm-teleop hand-sim sim sim-teleop hand-teleop quest-sim quest-hand-sim ui hand-control _sim-viewer
+.PHONY: help setup check arm-sim arm-teleop hand-sim sim sim-teleop hand-teleop hand-hardware quest-sim quest-hand-sim ui hand-control _sim-viewer
 
 help:
 	@echo "FR5 + IH01 + Quest 3"
@@ -16,6 +16,7 @@ help:
 	@echo "  make arm-sim       open manual FR5 + IH01 simulation"
 	@echo "  make arm-teleop    start Quest app and the linked simulation"
 	@echo "  make hand-sim      Quest 3 -> virtual IH01 only [SIDE=right|left|both; default right]"
+	@echo "  make hand-hardware Quest 3 -> physical IH01 only [SIDE=right|left]"
 	@echo "  make ui            open the simple simulation dashboard"
 	@echo "  make hand-control  open the preserved IH01 manual-control console"
 
@@ -43,6 +44,9 @@ hand-sim quest-sim quest-hand-sim:
 
 hand-teleop:
 	bash scripts/start_hand_teleop.sh
+
+hand-hardware:
+	$(MAKE) -C IPE-quest-hand-teleop wired-hardware $(if $(filter command line override,$(origin SIDE)),SIDE="$(SIDE)")
 
 ui:
 	$(PYTHON) scripts/teleop_ui.py

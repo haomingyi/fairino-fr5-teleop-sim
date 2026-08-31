@@ -18,12 +18,12 @@ from .protocol import HandFrame, HandStreamAssembler
 from .retarget import InitialRetargeter, RetargetResult, SEMANTICS
 
 
-PANEL_WIDTH = 920
-PANEL_HEIGHT = 640
-SLIDER_LEFT = 365
-SLIDER_RIGHT = 890
-FOLLOW_SLIDER_Y = 575
-MOTOR_SLIDER_Y = 615
+PANEL_WIDTH = 1100
+PANEL_HEIGHT = 780
+SLIDER_LEFT = 390
+SLIDER_RIGHT = 1065
+FOLLOW_SLIDER_Y = 715
+MOTOR_SLIDER_Y = 755
 
 
 def _draw_slider(canvas: np.ndarray, *, label: str, value: int,
@@ -163,15 +163,16 @@ def _panel(*, source: TcpSource, side: str,
         for index, (name, normalized, steps) in enumerate(
             zip(SEMANTICS, result.normalized, result.steps, strict=True)
         ):
-            y = 252 + index * 38
-            cv2.putText(canvas, f"CH{index + 1} {name:<18} {normalized:5.2f}  {steps:4d}",
-                        (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.43 if side == "both" else 0.55,
+            y = 252 + index * 60
+            cv2.putText(canvas, f"CH{index + 1} {name}  norm={normalized:0.2f}  target={steps:4d}",
+                        (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.40 if side == "both" else 0.52,
                         (130, 215, 255), 1, cv2.LINE_AA)
-            bar_x = x + (220 if side == "both" else 400)
-            bar_width = width - (bar_x - x) - 12
-            cv2.rectangle(canvas, (bar_x, y - 15), (bar_x + bar_width, y - 4), (60, 65, 75), -1)
-            cv2.rectangle(canvas, (bar_x, y - 15),
-                          (bar_x + round(bar_width * normalized), y - 4), (85, 190, 245), -1)
+            # Keep the bar on its own line so it cannot cover target values.
+            bar_y = y + 10
+            bar_width = width - 12
+            cv2.rectangle(canvas, (x, bar_y - 5), (x + bar_width, bar_y + 5), (60, 65, 75), -1)
+            cv2.rectangle(canvas, (x, bar_y - 5),
+                          (x + round(bar_width * normalized), bar_y + 5), (85, 190, 245), -1)
             if hardware_state is not None and result_side in hardware_state.hands:
                 view = hardware_state.hands[result_side]
                 if view.connected:
@@ -180,18 +181,18 @@ def _panel(*, source: TcpSource, side: str,
                         f"F={view.force[index]:5d}  T={view.temperature[index]:2d}C "
                         f"fault={view.fault[index]}"
                     )
-                    cv2.putText(canvas, feedback, (x, y + 15),
+                    cv2.putText(canvas, feedback, (x, y + 31),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.34,
                                 (175, 185, 195) if view.fault[index] == 0 else (80, 80, 255),
                                 1, cv2.LINE_AA)
-        cv2.putText(canvas, f"quality={result.quality:.2f}", (x, 490),
+        cv2.putText(canvas, f"quality={result.quality:.2f}", (x, 635),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (120, 225, 150), 1, cv2.LINE_AA)
 
     if side == "both":
-        draw_result("left", results.get("left"), 28, 430)
-        draw_result("right", results.get("right"), 470, 430)
+        draw_result("left", results.get("left"), 28, 515)
+        draw_result("right", results.get("right"), 560, 515)
     else:
-        draw_result(side, results.get(side), 40, 800)
+        draw_result(side, results.get(side), 40, 1000)
     if hardware_state is not None:
         cv2.putText(canvas, f"EtherCAT {hardware_state.state} WKC {hardware_state.wkc}/{hardware_state.expected_wkc}",
                     (600, 158), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
@@ -199,12 +200,12 @@ def _panel(*, source: TcpSource, side: str,
     controls = ("E arm/disarm | SPACE pause | R clear fault | Q quit"
                 if bridge is not None else
                 "L/R/B switch simulated hand | Q quit")
-    cv2.putText(canvas, controls, (28, 530), cv2.FONT_HERSHEY_SIMPLEX,
+    cv2.putText(canvas, controls, (28, 675), cv2.FONT_HERSHEY_SIMPLEX,
                 0.48, (120, 200, 255), 1, cv2.LINE_AA)
     # Native OpenCV/Qt trackbar captions become white-on-white with some Linux
     # desktop themes.  Draw the two controls ourselves so their current/max
     # values remain readable, matching the main visual-teleop console.
-    cv2.rectangle(canvas, (0, 548), (PANEL_WIDTH, PANEL_HEIGHT),
+    cv2.rectangle(canvas, (0, 690), (PANEL_WIDTH, PANEL_HEIGHT),
                   (245, 245, 245), -1)
     _draw_slider(canvas, label="FOLLOW SPEED (steps/frame)",
                  value=follow_speed, maximum=100,
