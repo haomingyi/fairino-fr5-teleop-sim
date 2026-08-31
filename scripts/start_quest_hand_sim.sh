@@ -14,6 +14,13 @@ if [[ -z "${SIDE:-}" && -t 0 ]]; then
   side="${requested_side:-right}"
 fi
 
+# Accept the same short forms used by the running UI (r/l/b).
+case "${side,,}" in
+  r) side=right ;;
+  l) side=left ;;
+  b) side=both ;;
+esac
+
 case "${side}" in
   left|right|both) ;;
   *) echo "FAIL: SIDE must be left, right, or both." >&2; exit 64 ;;

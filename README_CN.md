@@ -76,7 +76,7 @@ make hand-control  # 保留的 IH01 实体手动控制台
 额外力阈值，避免影响遥操灵活性。温度、故障码和 EtherCAT 状态仍持续监视，硬件急停与驱动器
 自身保护不被软件旁路。
 
-也可以直接运行 `make hand-sim`，启动时会提示选择右手、左手或双手，默认是 `right`；进入仿真后可在窗口的 HAND MODE 控件中切换，或按 `l`、`r`、`b`。
+也可以直接运行 `make hand-sim`，启动时会提示选择右手、左手或双手，默认是 `right`；输入完整单词或 `r`/`l`/`b` 缩写均可。进入仿真后可在窗口的 HAND MODE 控件中切换，或按 `l`、`r`、`b`。
 
 使用任何硬件前，请先阅读 [docs/OPERATIONS.md](docs/OPERATIONS.md)。集成运行流程默认且
 有意保持为 dry-run。FR5 SDK 适配器只作为调试和投产接口存在，默认不会启用。IH01 真机
