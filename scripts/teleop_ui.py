@@ -14,7 +14,7 @@ import signal
 import subprocess
 import threading
 import tkinter as tk
-from tkinter import messagebox, simpledialog, ttk
+from tkinter import messagebox, ttk
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -132,24 +132,8 @@ class TeleopUi(tk.Tk):
             self.state.set("急停已触发：当前无运行任务")
 
     def _hand_control(self) -> None:
-        if not messagebox.askyesno("确认", "将启动 IH01 EtherCAT 手动控制台。确认急停可用且只连接预期从站？"):
-            return
-        choice = simpledialog.askstring(
-            "选择手",
-            "输入 right（右手）、left（左手）或 both（双手）：",
-            initialvalue=self.mapping_mode.get(),
-            parent=self,
-        )
-        if choice is None:
-            return
-        side = {"r": "right", "l": "left", "b": "both"}.get(choice.strip().lower(), choice.strip().lower())
-        if side not in {"left", "right", "both"}:
-            messagebox.showerror("选择无效", "请输入 right、left 或 both。")
-            return
-        env = dict(os.environ)
-        env["SIDE"] = side
-        self._append(f"> make hand-control  [控制={side}]\n")
-        subprocess.Popen(["make", "hand-control"], cwd=ROOT, env=env, start_new_session=True)
+        if messagebox.askyesno("确认", "将启动 IH01 EtherCAT 手动控制台。确认急停可用且只连接预期从站？"):
+            subprocess.Popen(["make", "hand-control", f"SIDE={self.mapping_mode.get()}"], cwd=ROOT)
 
     def _close(self) -> None:
         self._stop(); self.destroy()
