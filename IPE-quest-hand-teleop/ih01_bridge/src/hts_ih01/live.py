@@ -282,7 +282,6 @@ def main() -> int:
             if args.hardware:
                 from ih01_runtime.hardware_control import Backend, ConsoleState
                 from ih01_runtime.teleop_bridge import HardwareTeleopBridge, TeleopConfig
-                from pathlib import Path
                 hardware_state = ConsoleState()
                 command = [
                     "sudo", "-n", str(Path(args.backend).resolve()), args.interface,
