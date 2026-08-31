@@ -42,18 +42,19 @@ make reverse     # 建立 TCP 端口转发，不会再次安装 APK
 
 看到 `Success` 和 `PASS: installed ... APK` 即表示安装完成；看到 `PASS: Quest localhost:8000 -> PC localhost:8000` 即表示通道建立成功。换另一台 Quest 3 时重复上述安装步骤即可。
 
-如果头显应用库里看不到程序，请在 Quest 3 打开“应用库”，点击左上角筛选器并选择
-“未知来源（Unknown Sources）”，不要只查看“全部”或“最近使用”。仍看不到时，确认头显
-开发者模式已开启并重启一次，然后在电脑执行：
+如果需要重新生成 APK（例如修改 Unity 工程），使用：
 
 ```bash
-adb shell pm list packages | grep com.wengmister.handtrackingstreamer
-adb shell cmd package resolve-activity --brief -c android.intent.category.LAUNCHER com.wengmister.handtrackingstreamer
+make unity-build   # 仅用 Unity 构建并更新本地 APK
+make install       # 将新 APK 安装到 Quest 3
+make reverse       # 建立 localhost:8000 通道
 ```
 
-当前随仓库提供的 APK 包名为 `com.wengmister.handtrackingstreamer`；第一条应返回该包名，
-第二条应返回可启动的 Unity Activity。若以后用 Unity 重新构建并采用项目配置中的包名，
-可通过 `APP_ID=...` 覆盖启动包名。
+`make unity-build` 需要本机已安装 Unity 6；它不会自动安装到头显。当前仓库随附 APK 的包名
+是 `com.wengmister.handtrackingstreamer`，直接运行 `make install` 即可使用；Unity 重新构建
+后若改用了其他包名，需要同步设置 `APP_ID` 后再启动遥操。
+
+如果头显应用库里看不到程序，请在 Quest 3 的应用库筛选器中选择“未知来源（Unknown Sources）”。
 
 ## 项目结构
 
