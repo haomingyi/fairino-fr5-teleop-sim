@@ -91,9 +91,10 @@ make reverse     # sets up the TCP reverse tunnel
 localhost:8000 -> PC localhost:8000` confirms the tunnel. Repeat these steps
 when replacing the headset; rebuilding the project is not required.
 
-You can also run `make hand-sim`; the launcher prompts for right, left, or
-both hands (default `right`). The running simulation keeps its HAND MODE
-control and `l`/`r`/`b` shortcuts for switching.
+The `make hand-teleop` window keeps its HAND MODE control and `l`/`r`/`b`
+shortcuts for switching the simulated hand view. Pressing `E` requests physical
+IH01 output; if no hand is connected, the UI reports the error and remains in
+simulation mode.
 
 Read [docs/OPERATIONS.md](docs/OPERATIONS.md) before hardware use. The
 integrated runtime intentionally defaults to dry-run. The FR5 SDK adapter is a

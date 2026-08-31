@@ -7,7 +7,7 @@ SIDE ?= right
 PORT ?= 8000
 LISTEN ?= 0
 
-.PHONY: help setup check arm-sim arm-teleop sim sim-teleop hand-teleop hand-hardware quest-sim quest-hand-sim ui hand-control _sim-viewer
+.PHONY: help setup check arm-sim arm-teleop sim sim-teleop hand-teleop hand-hardware ui hand-control _sim-viewer
 
 help:
 	@echo "FR5 + IH01 + Quest 3"
