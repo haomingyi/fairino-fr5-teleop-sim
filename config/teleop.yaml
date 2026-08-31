@@ -1,0 +1,53 @@
+quest:
+  # right: right wrist + right fingers; left: left wrist + left fingers;
+  # both: right wrist drives FR5 while left fingers drive the attached IH01.
+  mapping_mode: right
+  tcp_host: 127.0.0.1
+  tcp_port: 8000
+  frame_timeout_s: 0.35
+  right_handed_position_sign: [1.0, -1.0, 1.0]
+  left_handed_position_sign: [-1.0, -1.0, 1.0]
+arm:
+  enabled: true
+  translation_scale_mm_per_m: [500.0, 500.0, 500.0]
+  # Unity/OpenXR hand axes after Y inversion: forward -> FR5 forward (-X),
+  # right -> FR5 left/right (+Y), up -> FR5 up (+Z).
+  axis_matrix:
+    - [0.0, 0.0, -1.0]
+    - [1.0, 0.0, 0.0]
+    - [0.0, -1.0, 0.0]
+  orientation_enabled: false
+  max_translation_step_mm: 4.0
+  max_rotation_step_deg: 1.0
+  workspace_mm:
+    x: [-700.0, 700.0]
+    y: [-700.0, 700.0]
+    z: [100.0, 1000.0]
+hand:
+  enabled: true
+  minimum_quality: 0.25
+  max_step_delta_per_frame: 81
+  channel_max_steps: [1700, 1700, 1700, 1700, 1700, 1300]
+fr5:
+  ip: 192.168.58.2
+  tool_id: 1
+  user_id: 0
+  speed_pct: 10.0
+  # Bundled SDK and official example use 8 ms for ServoCart.
+  servo_period_s: 0.008
+  end_effector:
+    model: IH01-X1-R
+    approved_for_motion: false
+    load_number: 1
+    mass_kg: null
+    center_of_mass_mm: null
+    flange_to_tcp_mm_deg: null
+    # Provisional visualization transform only. Replace from adapter CAD.
+    # Official wrist3 origin is inside the last housing; this offset places
+    # the IH01 palm beyond the flange face instead of intersecting the wrist.
+    flange_to_hand_sim_xyz_m: [0.0, 0.0, 0.106]
+    flange_to_hand_sim_rpy_deg: [180.0, 0.0, 0.0]
+safety:
+  output_mode: dry-run
+  stop_on_timeout: true
+  require_fresh_anchor: true

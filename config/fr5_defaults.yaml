@@ -1,0 +1,74 @@
+# FR5 上位机默认参数（出厂占位；现场 IP/限速请本地覆盖，勿把机密写进仓库）
+robot:
+  model: FR5
+  default_ip: "192.168.58.2"
+  pc_ip_hint: "192.168.58.10"
+  nm_connection: "fr5-eth"   # 本机有线口 NetworkManager 连接名
+  xmlrpc_port: 20003
+  cnde_tcp_port: 20005
+  cnde_udp_port: 20006
+  legacy_state_port: 20004
+  status_protocol_port: 8083
+  tcp_cmd_port: 8080
+  webapp_hint: "http://192.168.58.2"
+  link_via_teach_pendant: true
+
+# 官方 SDK：StartJOG/MoveJ/MoveL 的 vel∈[0,100]；UI 速度条与档位读写下列键
+limits:
+  global_speed_pct_default: 20   # 连接后 SetSpeed
+  movel_vel_pct_default: 20      # 预留；末端当前以 JOG/远点 MoveJ 为主
+  movej_vel_pct_default: 20      # 预留；单关节步进/归零现跟 jog_vel
+  jog_vel_pct_default: 20
+  jog_acc_pct_default: 100
+  jog_vel_pct_max_ui: 100
+  joint_step_deg_max: 5.0        # 预留
+  cart_step_mm: 5.0              # 预留
+  cart_step_deg: 2.0             # 预留
+  jog_max_dis_joint_deg: 30.0    # 拖条 JOG max_dis 上限参考
+  slider_lead_deg: 15.0          # 拖条超前阻尼 ±deg
+  jog_max_dis_cart_mm: 50.0      # 文档/预留；末端点动行程目前写死 40mm 保持手感
+  payload_kg_rated: 5
+  payload_kg_max: 7
+  reach_mm: 922
+  repeatability_mm: 0.02
+  joint_max_speed_deg_s: [180.0, 180.0, 180.0, 180.0, 180.0, 180.0]
+  # 软限位：相对硬限位上下各收紧（度）；仅越限拦截，无「退出软限位」恢复
+  joint_soft_limit_margin_deg: 2.0
+  # 硬限位 [lo, hi] 度，与官方 URDF 一致；可按现场改
+  joint_limits_hard_deg:
+    - [-175.0, 175.0]   # J1
+    - [-265.0, 85.0]    # J2
+    - [-160.0, 160.0]   # J3
+    - [-265.0, 85.0]    # J4
+    - [-175.0, 175.0]   # J5
+    - [-175.0, 175.0]   # J6
+
+coords:
+  tool_id_default: 0
+  user_id_base: 0
+  # 操作台世界系：相对机器人基座绕 Z 顺时针（度）
+  world_yaw_cw_deg: 45.0
+  # 写入控制器的工件系编号；连接时 SetWObjList/SetWObjCoord
+  world_wobj_id: 1
+  # 连接后优先用 StartJOG(ref=8) 做世界系点动
+  prefer_wobj_jog: true
+
+# 项目脚本标记；连接门控以 UI「确认真机」为准，本字段不直接驱动运动
+mode: real
+# 真机运动默认要求 CNDE 实时状态 + XML-RPC。仅 20003 的降级连接不得用于遥操。
+allow_xmlrpc_degrade: false
+prefer_xmlrpc_only: false
+
+# 软件软零位落盘（相对项目根）；记录软零位 / 归软零
+soft_zero_file: config/soft_zero.yaml
+
+# FR5 末端安装 IH01-X1-R。以下质量、质心和 TCP 必须按实物+转接板测量；
+# 未确认前不得写入控制器或用于真机遥操。
+end_effector:
+  model: IH01-X1-R
+  approved_for_motion: false
+  load_number: 1
+  mass_kg: null
+  center_of_mass_mm: null
+  tool_id: 1
+  flange_to_tcp_mm_deg: null

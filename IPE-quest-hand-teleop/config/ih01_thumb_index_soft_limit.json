@@ -1,0 +1,28 @@
+{
+  "format": "ih01_thumb_index_soft_limit_v1",
+  "author": "haoming",
+  "applies_to": ["left", "right"],
+  "source_capture": "calibration/thumb-index-soft-limit/left-20260814-084315.json",
+  "right_hand_equivalence": "operator_confirmed_2026-08-14",
+  "channels": {
+    "index_flex": 4,
+    "thumb_flex": 5,
+    "thumb_rotate": 6
+  },
+  "interpolation": "piecewise_bilinear_with_endpoint_clamping_and_feedback_guard",
+  "ch4_axis_steps": [800, 900, 1200, 1600],
+  "ch6_axis_steps": [500, 800, 1100],
+  "ch5_max_steps": [
+    [1590, 1590, 1590, 840],
+    [1590, 1490, 1190, 490],
+    [1590, 1190, 950, 550]
+  ],
+  "notes": [
+    "Values subtract exactly 10 steps from the CH5 command targets reached during capture.",
+    "The CH4=900 CH5=1200 CH6=1100 pinch contact adds an interior boundary of CH5=1190.",
+    "Every PDO cycle uses the tighter of the requested-pose and live-feedback-pose limits.",
+    "Interpolation follows the measured grid directly without monotonic-envelope tightening.",
+    "A limit hit silently saturates CH5 only; subsequent safe targets continue to follow normally.",
+    "The operator confirmed that the same mechanical boundary applies to both hands."
+  ]
+}

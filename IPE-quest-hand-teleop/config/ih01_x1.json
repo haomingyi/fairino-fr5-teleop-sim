@@ -1,0 +1,117 @@
+{
+  "models": ["IH01-X1-L", "IH01-X1-R"],
+  "control_interfaces": ["EtherCAT", "RS485"],
+  "per_hand": {
+    "active_dof": 6,
+    "joint_count": 12,
+    "four_finger_max_grip_n": 10,
+    "thumb_max_grip_n": 15,
+    "thumb_speed_deg_s": 90,
+    "four_finger_speed_deg_s": 150,
+    "four_finger_max_bend_deg": 179
+  },
+  "ethercat": {
+    "interface_default": "enp130s0",
+    "name": "IPE-IO-Device",
+    "vendor_id": "0x00041101",
+    "product_code": "0x08080808",
+    "output_bytes": 16,
+    "input_bytes": 64,
+    "cycle_us": 2000,
+    "sync0_shift_ns": 700,
+    "position_mode": 2,
+    "default_speed_steps_s": 200,
+    "control_words": {
+      "set_mode": 1,
+      "set_speed": 2,
+      "set_force": 3,
+      "set_position": 4,
+      "clear_fault": 5,
+      "pause": 6,
+      "request_feedback": 7
+    },
+    "ui_position_limits_steps": {
+      "channel_1_to_5": [0, 1700],
+      "channel_6": [0, 1300]
+    },
+    "pdo": {
+      "set_data": "output bytes 0-11, six INT16",
+      "control_word": "output byte 12",
+      "position": "input bytes 0-11, six INT16",
+      "current": "input bytes 12-23, six INT16",
+      "force_raw": "input bytes 24-35, six INT16",
+      "temperature": "input bytes 36-47, six INT16",
+      "fault": "input bytes 48-59, six INT16",
+      "status_word": "input byte 60"
+    }
+  },
+  "channel_mapping": {
+    "1": "little_flex",
+    "2": "ring_flex",
+    "3": "middle_flex",
+    "4": "index_flex",
+    "5": "thumb_flex",
+    "6": "thumb_rotate"
+  },
+  "hardware_teleop": {
+    "command_rate_hz": 50,
+    "loss_timeout_s": 2.0,
+    "max_delta_steps_per_command": 81,
+    "speed_steps_s": 2000,
+    "contact_hold_delay_ms": 200,
+    "mapping_mode": "fixed_range",
+    "mapping_file": "calibration/ih01-real-hand-mapping.json",
+    "pinch_mapping_file": "calibration/ih01-pinch-mapping.json",
+    "left": {
+      "open_steps": [0, 0, 0, 0, 0, 0],
+      "closed_steps": [1700, 1700, 1700, 1700, 1700, 1300]
+    },
+    "right": {
+      "open_steps": [0, 0, 0, 0, 0, 0],
+      "closed_steps": [1700, 1700, 1700, 1700, 1700, 1300]
+    }
+  },
+  "simulation_model": {
+    "left_urdf": "vendor/ih01_x1/urdf/Dexhand-left/urdf/dexhand_left.urdf",
+    "right_urdf": "vendor/ih01_x1/urdf/Dexhand-right/urdf/dexhand_right.urdf",
+    "right_mesh_revision": "vendor/ih01_x1/revisions/2026-08-14-right-mesh-fix/Dexhand-right/meshes",
+    "right_joint_axis_correction": "generation-time thumb and distal flexion sign alignment",
+    "generated_mujoco": "simulation/ih01_x1_dual.xml",
+    "active_drives_per_hand": 6,
+    "passive_distal_coupling": true,
+    "fixed_wrist": false
+  },
+  "vision_retargeting": {
+    "calibration_schema": 5,
+    "engine": "ih01_retargeter_v2",
+    "four_finger_weights": [0.35, 0.55, 0.10],
+    "thumb_flexion_weights": [0.05, 0.35, 0.60],
+    "filter": "bounded low-lag adaptive filter",
+    "simulation_speed_scale": 4.0,
+    "thumb_opposition": "thumb-tip projection on the index-MCP to pinky-MCP palm axis",
+    "v2": {
+      "curl_weight": 0.62,
+      "joint_weight": 0.38,
+      "palm_temporal_weight": 0.04,
+      "side_temporal_weight": 0.16,
+      "back_temporal_weight": 0.34,
+      "occlusion_prediction_weight": 0.9,
+      "prediction_velocity_decay": 0.62,
+      "stationary_deadband": 0.012,
+      "open_image_threshold": 0.16,
+      "open_target_threshold": 0.12,
+      "pinch_constraint_weight": 1.15,
+      "pinch_index_target": 0.5625,
+      "pinch_thumb_flex_target": 0.75,
+      "pinch_thumb_opposition_target": 1.0
+    },
+    "mediapipe": {
+      "min_detection_confidence": 0.48,
+      "min_presence_confidence": 0.45,
+      "min_tracking_confidence": 0.45,
+      "dropout_hold_s": 2.0,
+      "bone_max_relative_change": 0.28,
+      "roi_padding": 0.16
+    }
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "quest": {
+    "mapping_mode": "right",
+    "tcp_host": "127.0.0.1",
+    "tcp_port": 8000,
+    "frame_timeout_s": 0.35,
+    "right_handed_position_sign": [
+      1.0,
+      -1.0,
+      1.0
+    ],
+    "left_handed_position_sign": [
+      -1.0,
+      -1.0,
+      1.0
+    ]
+  },
+  "arm": {
+    "enabled": true,
+    "translation_scale_mm_per_m": [
+      500.0,
+      500.0,
+      500.0
+    ],
+    "axis_matrix": [
+      [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    ],
+    "orientation_enabled": false,
+    "max_translation_step_mm": 4.0,
+    "max_rotation_step_deg": 1.0,
+    "workspace_mm": {
+      "x": [
+        -700.0,
+        700.0
+      ],
+      "y": [
+        -700.0,
+        700.0
+      ],
+      "z": [
+        100.0,
+        1000.0
+      ]
+    }
+  },
+  "hand": {
+    "enabled": true,
+    "minimum_quality": 0.25,
+    "max_step_delta_per_frame": 81,
+    "channel_max_steps": [
+      1700,
+      1700,
+      1700,
+      1700,
+      1700,
+      1300
+    ]
+  },
+  "fr5": {
+    "ip": "192.168.58.2",
+    "tool_id": 1,
+    "user_id": 0,
+    "speed_pct": 10.0,
+    "servo_period_s": 0.008,
+    "end_effector": {
+      "model": "IH01-X1-R",
+      "approved_for_motion": false,
+      "load_number": 1,
+      "mass_kg": null,
+      "center_of_mass_mm": null,
+      "flange_to_tcp_mm_deg": null,
+      "flange_to_hand_sim_xyz_m": [
+        0.0,
+        0.0,
+        0.106
+      ],
+      "flange_to_hand_sim_rpy_deg": [
+        180.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "safety": {
+    "output_mode": "dry-run",
+    "stop_on_timeout": true,
+    "require_fresh_anchor": true
+  }
+}

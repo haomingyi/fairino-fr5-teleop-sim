@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="ih01_x1_dual_urdf">
+  <!-- Hands generated from their native vendor URDF trees. The right visual geometry uses repaired mesh revision 2026-08-14-right-mesh-fix; exported hinge-axis inconsistencies are corrected during generation. Do not hand-edit. Run scripts/generate_ih01_mujoco.py after source URDF updates. -->
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.005" gravity="0 0 0" integrator="implicitfast" />
+  <visual>
+    <global offwidth="960" offheight="540" />
+    <headlight ambient="0.26 0.26 0.28" diffuse="0.58 0.58 0.60" specular="0.14 0.14 0.14" />
+    <rgba haze="0.06 0.075 0.10 1" />
+  </visual>
+  <asset>
+    <texture name="sky" type="skybox" builtin="gradient" rgb1="0.025 0.035 0.055" rgb2="0.004 0.007 0.012" width="512" height="3072" />
+    <texture name="floor_tex" type="2d" builtin="checker" mark="edge" rgb1="0.055 0.065 0.08" rgb2="0.11 0.13 0.16" markrgb="0.25 0.29 0.35" width="512" height="512" />
+    <material name="floor" texture="floor_tex" texrepeat="5 5" reflectance="0" />
+    <material name="shell_white" rgba="0.66 0.70 0.74 1" specular="0.22" shininess="0.32" />
+    <material name="shell_blue" rgba="0.025 0.16 0.62 1" specular="0.20" shininess="0.30" />
+    <material name="shell_blue_tip" rgba="0.055 0.32 0.82 1" specular="0.18" shininess="0.26" />
+    <material name="joint_metal" rgba="0.95 0.48 0.035 1" specular="0.34" shininess="0.48" />
+    <mesh name="lh_l_base_link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_base_link.STL" />
+    <mesh name="lh_l_thumb_yaw_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_thumb_yaw_Link.STL" />
+    <mesh name="lh_l_thumb_1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_thumb_1_Link.STL" />
+    <mesh name="lh_l_thumb_2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_thumb_2_Link.STL" />
+    <mesh name="lh_l_thumb_3_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_thumb_3_Link.STL" />
+    <mesh name="lh_l_index_1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_index_1_Link.STL" />
+    <mesh name="lh_l_index_2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_index_2_Link.STL" />
+    <mesh name="lh_l_middle_1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_middle_1_Link.STL" />
+    <mesh name="lh_l_middle_2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_middle_2_Link.STL" />
+    <mesh name="lh_l_ring_1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_ring_1_Link.STL" />
+    <mesh name="lh_l_ring_2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_ring_2_Link.STL" />
+    <mesh name="lh_l_little_1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_little_1_Link.STL" />
+    <mesh name="lh_l_little_2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_little_2_Link.STL" />
+    <mesh name="rh_base_link" content_type="model/stl" file="../simulation/meshes/revisions/2026-08-14-right-mesh-fix/Dexhand-right/meshes/base_link.STL" />
+    <mesh name="rh_r_thumb1_Link" content_type="model/stl" file="../simulation/meshes/revisions/2026-08-14-right-mesh-fix/Dexhand-right/meshes/r_thumb1_Link.STL" />
+    <mesh name="rh_r_thumb2_Link" content_type="model/stl" file="../simulation/meshes/revisions/2026-08-14-right-mesh-fix/Dexhand-right/meshes/r_thumb2_Link.STL" />
+    <mesh name="rh_r_thumb3_Link" content_type="model/stl" file="../simulation/meshes/revisions/2026-08-14-right-mesh-fix/Dexhand-right/meshes/r_thumb3_Link.STL" />
+    <mesh name="rh_r_thumb4_Link" content_type="model/stl" file="../simulation/meshes/revisions/2026-08-14-right-mesh-fix/Dexhand-right/meshes/r_thumb4_Link.STL" />
+    <mesh name="rh_r_index1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_index_1_Link.STL" scale="-1 1 1" />
+    <mesh name="rh_r_index2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_index_2_Link.STL" scale="-1 1 1" />
+    <mesh name="rh_r_middle1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_middle_1_Link.STL" scale="-1 1 1" />
+    <mesh name="rh_r_middle2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_middle_2_Link.STL" scale="-1 1 1" />
+    <mesh name="rh_r_ring1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_ring_1_Link.STL" scale="-1 1 1" />
+    <mesh name="rh_r_ring2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_ring_2_Link.STL" scale="-1 1 1" />
+    <mesh name="rh_r_little1_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_little_1_Link.STL" scale="-1 1 1" />
+    <mesh name="rh_r_little2_Link" content_type="model/stl" file="../simulation/meshes/Dexhand-left/meshes/l_little_2_Link.STL" scale="-1 1 1" />
+  </asset>
+  <default>
+    <joint damping="0.12" armature="0.0002" frictionloss="0.002" />
+  </default>
+  <worldbody>
+    <light pos="-0.35 -0.30 0.70" dir="0.35 0.30 -0.70" diffuse="0.92 0.90 0.86" />
+    <light pos="0.45 0.25 0.55" dir="-0.45 -0.25 -0.55" diffuse="0.38 0.48 0.72" />
+    <geom type="plane" size="1.20 1.20 0.01" material="floor" contype="0" conaffinity="0" />
+    <body name="lh_hand" mocap="true" pos="-0.14 0.02 0.008" euler="3.14159265359 0 0">
+      <geom type="mesh" mesh="lh_l_base_link" material="shell_white" contype="0" conaffinity="0" group="1" />
+      <body name="l_thumb_yaw_Link" pos="0.020446 -0.014753 -0.058386">
+        <inertial pos="0.00303049 -0.00371035 -0.00141075" quat="0.474801 0.870799 0.0842586 0.0957796" mass="0.00174074" diaginertia="8.47872e-08 6.66873e-08 4.47146e-08" />
+        <joint name="l_thumb_yaw_joint" pos="0 0 0" axis="-0 -0 -1" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="lh_l_thumb_yaw_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="l_thumb_1_Link" pos="0.0049487 -0.007826 0.001476">
+          <inertial pos="0.0142859 -0.0212435 -0.00616423" quat="0.503216 0.813632 0.247672 0.153084" mass="0.0139644" diaginertia="5.1503e-06 3.8977e-06 1.48447e-06" />
+          <joint name="l_thumb_1_joint" pos="0 0 0" axis="0.830459 0.557079 0" range="0 0.959931" actuatorfrcrange="-2 2" />
+          <geom type="mesh" mesh="lh_l_thumb_1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+          <body name="l_thumb_2_Link" pos="0.029608 -0.044138 -0.016524">
+            <inertial pos="0.00607042 -0.00916419 -0.00734525" quat="0.448241 -0.277611 0.145575 0.83715" mass="0.00959607" diaginertia="1.21971e-06 1.135e-06 9.86428e-07" />
+            <joint name="l_thumb_2_joint" pos="0 0 0" axis="0.830459 0.557079 0" range="0 1.22173" actuatorfrcrange="-2 2" stiffness="0.12" springref="0" damping="0.18" />
+            <geom type="mesh" mesh="lh_l_thumb_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+            <body name="l_thumb_3_Link" pos="0.010875 -0.016212 -0.010673">
+              <inertial pos="0.0065033 -0.0097578 -0.0085891" quat="0.195416 0.803294 -0.428548 0.364524" mass="0.0060246" diaginertia="3.8969e-07 3.72891e-07 2.7668e-07" />
+              <joint name="l_thumb_3_joint" pos="0 0 0" axis="0.830459 0.557079 0" range="0 1.39626" actuatorfrcrange="-2 2" stiffness="0.12" springref="0" damping="0.18" />
+              <geom type="mesh" mesh="lh_l_thumb_3_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+              <site name="lh_l_thumb_3_joint_axis" type="cylinder" pos="0 0 0" quat="0.70710678 -0.3939145 0.58722344 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+              <geom name="lh_l_thumb_3_Link_collision" type="capsule" fromto="0 0 0 0.013 -0.0195 -0.0172" size="0.0095" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+            </body>
+            <site name="lh_l_thumb_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.70710678 -0.3939145 0.58722344 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+            <geom name="lh_l_thumb_2_Link_collision" type="capsule" fromto="0 0 0 0.010875 -0.016212 -0.010673" size="0.0095" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+          </body>
+          <site name="lh_l_thumb_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.70710678 -0.3939145 0.58722344 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+        </body>
+        <site name="lh_l_thumb_yaw_joint_axis" type="cylinder" pos="0 0 0" quat="0 1 0 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <body name="l_index_1_Link" pos="0.026544 0.00265 -0.13762">
+        <inertial pos="0.00055471 0.0039159 -0.013508" quat="0.997619 -0.0663002 -0.0189771 -0.00013727" mass="0.0068893" diaginertia="1.00759e-06 9.74777e-07 4.5437e-07" />
+        <joint name="l_index_1_joint" pos="0 0 0" axis="-0.999292 0 -0.0376151" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="lh_l_index_1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="l_index_2_Link" pos="0.0013535 0.00016841 -0.035957">
+          <inertial pos="0.000803053 0.0025252 -0.0213918" quat="0.998579 -0.0498121 -0.01891 -0.000639823" mass="0.0083279" diaginertia="1.86257e-06 1.85363e-06 2.22203e-07" />
+          <joint name="l_index_2_joint" pos="0 0 0" axis="-0.999292 -0 -0.0376151" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
+          <geom type="mesh" mesh="lh_l_index_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <site name="lh_l_index_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.69368036 0 -0.72028297 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+          <geom name="lh_l_index_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.043" size="0.008" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+        </body>
+        <site name="lh_l_index_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.69368036 -0 -0.72028297 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <body name="l_middle_1_Link" pos="0.0074174 0.00265 -0.13796">
+        <inertial pos="2.0834e-06 0.0035571 -0.013624" quat="0.996851 -0.0792723 0.00142356 0.00125434" mass="0.0068893" diaginertia="1.0076e-06 9.74474e-07 4.54661e-07" />
+        <joint name="l_middle_1_joint" pos="0 0 0" axis="-0.999995 0 0.00323982" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="lh_l_middle_1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="l_middle_2_Link" pos="-0.00011655 -0.00078748 -0.035975">
+          <inertial pos="-7.9346e-05 0.00153957 -0.0238387" quat="0.997879 -0.0650835 0.00151093 0.000166722" mass="0.00916877" diaginertia="2.46857e-06 2.4482e-06 2.4433e-07" />
+          <joint name="l_middle_2_joint" pos="0 0 0" axis="-0.999995 -0 0.00323982" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
+          <geom type="mesh" mesh="lh_l_middle_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <site name="lh_l_middle_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.7082513 0 -0.7059604 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+          <geom name="lh_l_middle_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.048" size="0.008" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+        </body>
+        <site name="lh_l_middle_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.7082513 -0 -0.7059604 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <body name="l_ring_1_Link" pos="-0.011613 0.00265 -0.13744">
+        <inertial pos="-0.00063012 0.0039157 -0.013504" quat="0.997493 -0.0662395 0.0247613 0.00277741" mass="0.0068892" diaginertia="1.00763e-06 9.74777e-07 4.54361e-07" />
+        <joint name="l_ring_1_joint" pos="0 0 0" axis="-0.998748 0 0.0500289" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="lh_l_ring_1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="l_ring_2_Link" pos="-0.0018002 0.00016841 -0.035937">
+          <inertial pos="-0.0010732 0.0025253 -0.02138" quat="0.998449 -0.0497854 0.024877 0.00162916" mass="0.0083278" diaginertia="1.86252e-06 1.85365e-06 2.22197e-07" />
+          <joint name="l_ring_2_joint" pos="0 0 0" axis="-0.996195 -0 0.0871564" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
+          <geom type="mesh" mesh="lh_l_ring_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <site name="lh_l_ring_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.73727755 0 -0.67558998 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+          <geom name="lh_l_ring_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.043" size="0.008" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+        </body>
+        <site name="lh_l_ring_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.7245788 -0 -0.68919196 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <body name="l_little_1_Link" pos="-0.030714 0.00265 -0.13605">
+        <inertial pos="9.37216e-05 -0.00391585 -0.0135189" quat="0.9978 0.0662921 -0.00020608 -0.00112124" mass="0.00688931" diaginertia="1.00761e-06 9.74778e-07 4.5437e-07" />
+        <joint name="l_little_1_joint" pos="0 0 0" axis="-0.996195 0 0.0871564" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="lh_l_little_1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="l_little_2_Link" pos="-0.0031349 0.00016975 -0.035832">
+          <inertial pos="-0.0015865 0.0025076 -0.018095" quat="0.997276 -0.059618 0.0433541 0.00249154" mass="0.0065771" diaginertia="1.08557e-06 1.07752e-06 1.60199e-07" />
+          <joint name="l_little_2_joint" pos="0 0 0" axis="-0.996195 -0 0.0871564" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
+          <geom type="mesh" mesh="lh_l_little_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <site name="lh_l_little_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.73727755 0 -0.67558998 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+          <geom name="lh_l_little_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.039" size="0.008" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+        </body>
+        <site name="lh_l_little_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.73727755 -0 -0.67558998 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <geom name="lh_palm_collision" type="box" pos="0 -0.013 -0.073" size="0.052 0.014 0.052" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+    </body>
+    <body name="rh_hand" mocap="true" pos="0.14 0.02 0.008" euler="3.14159265359 0 0">
+      <geom type="mesh" mesh="rh_base_link" material="shell_white" contype="0" conaffinity="0" group="1" />
+      <body name="r_thumb1_Link" pos="-0.027072 -0.015739 -0.055499">
+        <inertial pos="-0.0015511 -0.0027329 -0.0024235" quat="0.478109 0.865945 -0.062186 -0.132981" mass="0.0017407" diaginertia="8.47865e-08 6.66868e-08 4.47147e-08" />
+        <joint name="r_thumb1_joint" pos="0 0 0" axis="0.0871564 0 0.996195" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="rh_r_thumb1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="r_thumb2_Link" pos="-0.0031983 -0.0068542 0.00061844">
+          <inertial pos="-0.01474 -0.021457 -0.0044646" quat="0.520277 0.802354 -0.222747 -0.189534" mass="0.013886" diaginertia="5.12903e-06 3.8821e-06 1.47877e-06" />
+          <joint name="r_thumb2_joint" pos="0 0 0" axis="0.82893 -0.55463 -0.072522" range="0 0.959931" actuatorfrcrange="-2 2" />
+          <geom type="mesh" mesh="rh_r_thumb2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <body name="r_thumb3_Link" pos="-0.030794 -0.044317 -0.01304">
+            <inertial pos="-0.00672413 -0.00946996 -0.00628531" quat="0.825366 -0.129743 0.310791 0.453152" mass="0.00938232" diaginertia="1.21197e-06 1.11419e-06 9.73065e-07" />
+            <joint name="r_thumb3_joint" pos="0 0 0" axis="0.82893 -0.55463 -0.072522" range="0 1.22173" actuatorfrcrange="-2 2" stiffness="0.12" springref="0" damping="0.18" />
+            <geom type="mesh" mesh="rh_r_thumb3_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+            <body name="r_thumb4_Link" pos="-0.012257 -0.01718 -0.0087094">
+              <inertial pos="-0.00684703 -0.00953345 -0.00762481" quat="0.41841 0.433265 -0.776309 0.185902" mass="0.00602459" diaginertia="3.89688e-07 3.72888e-07 2.7668e-07" />
+              <joint name="r_thumb4_joint" pos="0 0 0" axis="0.82893 -0.55463 -0.072522" range="0 1.39626" actuatorfrcrange="-2 2" stiffness="0.12" springref="0" damping="0.18" />
+              <geom type="mesh" mesh="rh_r_thumb4_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+              <site name="rh_r_thumb4_joint_axis" type="cylinder" pos="0 0 0" quat="0.68098383 0.40722724 0.60862714 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+              <geom name="rh_r_thumb4_Link_collision" type="capsule" fromto="0 0 0 -0.013 -0.0195 -0.0172" size="0.0095" contype="2" conaffinity="2" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+            </body>
+            <site name="rh_r_thumb3_joint_axis" type="cylinder" pos="0 0 0" quat="0.68098383 0.40722724 0.60862714 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+            <geom name="rh_r_thumb3_Link_collision" type="capsule" fromto="0 0 0 -0.012257 -0.01718 -0.0087094" size="0.0095" contype="2" conaffinity="2" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+          </body>
+          <site name="rh_r_thumb2_joint_axis" type="cylinder" pos="0 0 0" quat="0.68098383 0.40722724 0.60862714 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+        </body>
+        <site name="rh_r_thumb1_joint_axis" type="cylinder" pos="0 0 0" quat="0.99904821 -0 0.043619701 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <body name="r_index1_Link" pos="-0.038388 0.00265 -0.13478">
+        <inertial pos="-0.00055471 0.0039159 -0.013508" quat="0.996697 -0.0521392 0.0621016 0.00437152" mass="0.0059322" diaginertia="9.0857e-07 8.74342e-07 3.64799e-07" />
+        <joint name="r_index1_joint" pos="0 0 0" axis="-0.999292 -0 0.0376151" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="rh_r_index1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="r_index2_Link" pos="-0.0013535 0.00016841 -0.035957">
+          <inertial pos="-0.000803053 0.0025252 -0.0213918" quat="0.996819 -0.0496899 0.0622127 0.00348921" mass="0.00828461" diaginertia="1.86237e-06 1.8535e-06 2.22096e-07" />
+          <joint name="r_index2_joint" pos="0 0 0" axis="-0.999292 0 0.0376151" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
+          <geom type="mesh" mesh="rh_r_index2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <site name="rh_r_index2_joint_axis" type="cylinder" pos="0 0 0" quat="0.72028297 -0 -0.69368036 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+          <geom name="rh_r_index2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.043" size="0.008" contype="2" conaffinity="2" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+        </body>
+        <site name="rh_r_index1_joint_axis" type="cylinder" pos="0 0 0" quat="0.72028297 0 -0.69368036 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <body name="r_middle1_Link" pos="-0.019363 0.00265 -0.13679">
+        <inertial pos="-2.0834e-06 0.0035571 -0.013624" quat="0.997758 -0.0522183 0.0417257 0.00330642" mass="0.00593218" diaginertia="9.08568e-07 8.74339e-07 3.64795e-07" />
+        <joint name="r_middle1_joint" pos="0 0 0" axis="-0.999995 -0 -0.00323982" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="rh_r_middle1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="r_middle2_Link" pos="0.00011655 -0.00078748 -0.035975">
+          <inertial pos="7.9346e-05 0.00153957 -0.0238387" quat="0.998158 -0.0438766 0.0418592 0.00195134" mass="0.00912541" diaginertia="2.46825e-06 2.44796e-06 2.44221e-07" />
+          <joint name="r_middle2_joint" pos="0 0 0" axis="-0.999995 0 -0.00323982" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
+          <geom type="mesh" mesh="rh_r_middle2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <site name="rh_r_middle2_joint_axis" type="cylinder" pos="0 0 0" quat="0.7059604 -0 -0.7082513 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+          <geom name="rh_r_middle2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.048" size="0.008" contype="2" conaffinity="2" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+        </body>
+        <site name="rh_r_middle1_joint_axis" type="cylinder" pos="0 0 0" quat="0.7059604 0 -0.7082513 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <body name="r_ring1_Link" pos="-0.00045989 0.00265 -0.13793">
+        <inertial pos="0.00063012 0.0039157 -0.013504" quat="0.998461 -0.0522885 0.0183625 0.00207533" mass="0.00593221" diaginertia="9.08572e-07 8.7434e-07 3.64797e-07" />
+        <joint name="r_ring1_joint" pos="0 0 0" axis="-0.998748 -0 -0.0500289" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="rh_r_ring1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="r_ring2_Link" pos="0.0018002 0.00016841 -0.035937">
+          <inertial pos="0.0010732 0.0025253 -0.02138" quat="0.998587 -0.0498082 0.0184694 0.00131092" mass="0.00828461" diaginertia="1.86237e-06 1.8535e-06 2.22096e-07" />
+          <joint name="r_ring2_joint" pos="0 0 0" axis="-0.996195 0 -0.0871564" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
+          <geom type="mesh" mesh="rh_r_ring2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <site name="rh_r_ring2_joint_axis" type="cylinder" pos="0 0 0" quat="0.67558998 -0 -0.73727755 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+          <geom name="rh_r_ring2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.043" size="0.008" contype="2" conaffinity="2" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+        </body>
+        <site name="rh_r_ring1_joint_axis" type="cylinder" pos="0 0 0" quat="0.68919196 0 -0.7245788 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <body name="r_little1_Link" pos="0.01869 0.00265 -0.1382">
+        <inertial pos="-9.37216e-05 -0.00391585 -0.0135189" quat="0.9978 -0.0662921 -0.00020608 0.00112124" mass="0.00688931" diaginertia="1.00761e-06 9.74778e-07 4.5437e-07" />
+        <joint name="r_little1_joint" pos="0 0 0" axis="-0.996195 -0 -0.0871564" range="0 1.39626" actuatorfrcrange="-2 2" />
+        <geom type="mesh" mesh="rh_r_little1_Link" material="shell_blue" contype="0" conaffinity="0" group="1" />
+        <body name="r_little2_Link" pos="0.0031349 0.00016975 -0.035832">
+          <inertial pos="0.0015865 0.0025076 -0.018095" quat="0.998218 -0.0596694 -0.000209857 -0.000297997" mass="0.00653354" diaginertia="1.08526e-06 1.07731e-06 1.6009e-07" />
+          <joint name="r_little2_joint" pos="0 0 0" axis="-0.996195 0 -0.0871564" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
+          <geom type="mesh" mesh="rh_r_little2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
+          <site name="rh_r_little2_joint_axis" type="cylinder" pos="0 0 0" quat="0.67558998 -0 -0.73727755 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+          <geom name="rh_r_little2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.039" size="0.008" contype="2" conaffinity="2" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+        </body>
+        <site name="rh_r_little1_joint_axis" type="cylinder" pos="0 0 0" quat="0.67558998 0 -0.73727755 0" size="0.0048 0.0085" material="joint_metal" group="2" />
+      </body>
+      <geom name="rh_palm_collision" type="box" pos="-0.012 -0.013 -0.073" size="0.052 0.014 0.052" contype="2" conaffinity="2" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+    </body>
+  </worldbody>
+  <actuator>
+    <position name="lh_index_flex" joint="l_index_1_joint" kp="24" ctrlrange="0 1.396263" forcerange="-2 2" />
+    <position name="lh_middle_flex" joint="l_middle_1_joint" kp="24" ctrlrange="0 1.396263" forcerange="-2 2" />
+    <position name="lh_ring_flex" joint="l_ring_1_joint" kp="24" ctrlrange="0 1.396263" forcerange="-2 2" />
+    <position name="lh_pinky_flex" joint="l_little_1_joint" kp="24" ctrlrange="0 1.396263" forcerange="-2 2" />
+    <position name="lh_thumb_opposition" joint="l_thumb_yaw_joint" kp="12" ctrlrange="0 0.7" forcerange="-2 2" />
+    <position name="lh_thumb_flex" joint="l_thumb_1_joint" kp="20" ctrlrange="0 0.959931" forcerange="-2 2" />
+    <position name="rh_index_flex" joint="r_index1_joint" kp="24" ctrlrange="0 1.396263" forcerange="-2 2" />
+    <position name="rh_middle_flex" joint="r_middle1_joint" kp="24" ctrlrange="0 1.396263" forcerange="-2 2" />
+    <position name="rh_ring_flex" joint="r_ring1_joint" kp="24" ctrlrange="0 1.396263" forcerange="-2 2" />
+    <position name="rh_pinky_flex" joint="r_little1_joint" kp="24" ctrlrange="0 1.396263" forcerange="-2 2" />
+    <position name="rh_thumb_opposition" joint="r_thumb1_joint" kp="12" ctrlrange="0 0.7" forcerange="-2 2" />
+    <position name="rh_thumb_flex" joint="r_thumb2_joint" kp="20" ctrlrange="0 0.959931" forcerange="-2 2" />
+  </actuator>
+  <equality>
+    <joint name="lh_index_spring_coupling" joint1="l_index_2_joint" joint2="l_index_1_joint" polycoef="0 1.05 0 0 0" solref="0.035 1" solimp="0.90 0.95 0.002" />
+    <joint name="lh_middle_spring_coupling" joint1="l_middle_2_joint" joint2="l_middle_1_joint" polycoef="0 1.05 0 0 0" solref="0.035 1" solimp="0.90 0.95 0.002" />
+    <joint name="lh_ring_spring_coupling" joint1="l_ring_2_joint" joint2="l_ring_1_joint" polycoef="0 1.05 0 0 0" solref="0.035 1" solimp="0.90 0.95 0.002" />
+    <joint name="lh_pinky_spring_coupling" joint1="l_little_2_joint" joint2="l_little_1_joint" polycoef="0 1.05 0 0 0" solref="0.035 1" solimp="0.90 0.95 0.002" />
+    <joint name="lh_thumb_middle_spring_coupling" joint1="l_thumb_2_joint" joint2="l_thumb_1_joint" polycoef="0 1.15 0 0 0" solref="0.040 1" solimp="0.88 0.95 0.003" />
+    <joint name="lh_thumb_distal_spring_coupling" joint1="l_thumb_3_joint" joint2="l_thumb_1_joint" polycoef="0 1.3 0 0 0" solref="0.040 1" solimp="0.88 0.95 0.003" />
+    <joint name="rh_index_spring_coupling" joint1="r_index2_joint" joint2="r_index1_joint" polycoef="0 1.05 0 0 0" solref="0.035 1" solimp="0.90 0.95 0.002" />
+    <joint name="rh_middle_spring_coupling" joint1="r_middle2_joint" joint2="r_middle1_joint" polycoef="0 1.05 0 0 0" solref="0.035 1" solimp="0.90 0.95 0.002" />
+    <joint name="rh_ring_spring_coupling" joint1="r_ring2_joint" joint2="r_ring1_joint" polycoef="0 1.05 0 0 0" solref="0.035 1" solimp="0.90 0.95 0.002" />
+    <joint name="rh_pinky_spring_coupling" joint1="r_little2_joint" joint2="r_little1_joint" polycoef="0 1.05 0 0 0" solref="0.035 1" solimp="0.90 0.95 0.002" />
+    <joint name="rh_thumb_middle_spring_coupling" joint1="r_thumb3_joint" joint2="r_thumb2_joint" polycoef="0 1.15 0 0 0" solref="0.040 1" solimp="0.88 0.95 0.003" />
+    <joint name="rh_thumb_distal_spring_coupling" joint1="r_thumb4_joint" joint2="r_thumb2_joint" polycoef="0 1.3 0 0 0" solref="0.040 1" solimp="0.88 0.95 0.003" />
+  </equality>
+</mujoco>

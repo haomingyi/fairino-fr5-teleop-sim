@@ -1,0 +1,25 @@
+# Unity generated state; never commit these directories.
+hand_tracking_streamer/Library/
+hand_tracking_streamer/Temp/
+hand_tracking_streamer/.utmp/
+hand_tracking_streamer/Logs/
+hand_tracking_streamer/UserSettings/
+hand_tracking_streamer/Builds/
+hand_tracking_streamer/*.csproj
+hand_tracking_streamer/*.sln*
+hand_tracking_streamer/*.userprefs
+hand_tracking_streamer/*.apk
+hand_tracking_streamer/mono_crash.mem.*.blob
+
+# Local Python/runtime output.
+.venv/
+build/
+ih01_bridge/.pytest_cache/
+ih01_bridge/**/__pycache__/
+runtime/**/__pycache__/
+artifacts/
+*.pyc
+uv.lock
+# The upstream APK is only a local reverse-engineering reference.
+hand_tracking_streamer.apk
+.env

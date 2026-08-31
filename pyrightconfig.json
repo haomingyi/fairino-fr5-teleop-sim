@@ -1,0 +1,7 @@
+{
+  "extraPaths": [
+    "third_party/fairino-python-sdk/linux",
+    "scripts"
+  ],
+  "reportMissingImports": "warning"
+}

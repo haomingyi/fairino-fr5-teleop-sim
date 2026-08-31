@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+artifacts/*.jsonl
+*.log
+MUJOCO_LOG.TXT
+config/local.yaml
+config/soft_zero.yaml
+IPE-quest-hand-teleop/.venv/
+IPE-quest-hand-teleop/build/
+IPE-quest-hand-teleop/artifacts/
+IPE-quest-hand-teleop/hand_tracking_streamer.apk
+IPE-quest-hand-teleop/hand_tracking_streamer/Library/
+IPE-quest-hand-teleop/hand_tracking_streamer/Temp/
+IPE-quest-hand-teleop/hand_tracking_streamer/Logs/

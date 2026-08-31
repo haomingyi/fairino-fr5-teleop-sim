@@ -1,0 +1,15 @@
+[project]
+name = "ipe-quest-hand-teleop"
+version = "0.1.0"
+description = "Portable Quest hand-tracking streamer adapter for IH01 dexterous hands"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "opencv-python>=4.8,<5",
+    "mujoco>=3.1",
+    "glfw>=2.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
