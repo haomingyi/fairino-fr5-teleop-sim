@@ -73,6 +73,9 @@ fingers follow landmarks and the wrist follows Quest position/orientation. It
 does not load the FR5 model or any arm SDK. `make hand-control` remains the
 separate physical IH01 manual-control command.
 
+For Quest-to-physical-IH01 teleoperation, use `make hand-teleop`. It prompts
+for the connected hand and keeps output disarmed until `E` is pressed.
+
 ### Installing on a new Quest 3
 
 `make install` installs the APK on the headset. `make reverse` only forwards

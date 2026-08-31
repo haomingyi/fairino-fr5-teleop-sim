@@ -16,7 +16,7 @@ help:
 	@echo "  make arm-sim       open manual FR5 + IH01 simulation"
 	@echo "  make arm-teleop    start Quest app and the linked simulation"
 	@echo "  make hand-sim      Quest 3 -> virtual IH01 only (prompts for hand)"
-	@echo "  make hand-hardware Quest 3 -> physical IH01 only (prompts for hand)"
+	@echo "  make hand-teleop  Quest 3 -> physical IH01 only (prompts for hand)"
 	@echo "  make ui            open the simple simulation dashboard"
 	@echo "  make hand-control  open the preserved IH01 manual-control console"
 
@@ -42,10 +42,7 @@ arm-teleop sim-teleop:
 hand-sim quest-sim quest-hand-sim:
 	bash scripts/start_quest_hand_sim.sh
 
-hand-teleop:
-	bash scripts/start_hand_teleop.sh
-
-hand-hardware:
+hand-teleop hand-hardware:
 	$(MAKE) -C IPE-quest-hand-teleop wired-hardware $(if $(filter command line override,$(origin SIDE)),SIDE="$(SIDE)")
 
 ui:
