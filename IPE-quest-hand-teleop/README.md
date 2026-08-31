@@ -118,9 +118,9 @@ make hand-control
 hand-control 默认使用逐通道接触保护：电流达到 1000 mA 或堵转持续 200 ms 后保持该通道，
 对应目标松开/回退即释放。拇指–食指耦合软限位不参与该路径，避免额外限制遥操动作。
 
-也可以跳过选择提示：`SIDE=left make hand-control`、`SIDE=right make hand-control`，
-或 `SIDE=both IH01_LEFT_SLAVE=1 IH01_RIGHT_SLAVE=2 make hand-control`。左右手外壳和从站
-编号无法由 EtherCAT 自动区分，选择只是在控制台中建立逻辑映射；请按实际接线填写从站号。
+默认会在启动时提示选择左手、右手或双手；左右手外壳和从站编号无法由 EtherCAT 自动区分，
+选择只是在控制台中建立逻辑映射，请按实际接线填写从站号。需要脚本化运行时仍可用 `SIDE`
+环境变量跳过提示。
 
 ## 维护与排错
 
