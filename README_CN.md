@@ -42,6 +42,17 @@ make reverse     # 建立 TCP 端口转发，不会再次安装 APK
 
 看到 `Success` 和 `PASS: installed ... APK` 即表示安装完成；看到 `PASS: Quest localhost:8000 -> PC localhost:8000` 即表示通道建立成功。换另一台 Quest 3 时重复上述安装步骤即可。
 
+如果头显应用库里看不到程序，请在 Quest 3 打开“应用库”，点击左上角筛选器并选择
+“未知来源（Unknown Sources）”，不要只查看“全部”或“最近使用”。仍看不到时，确认头显
+开发者模式已开启并重启一次，然后在电脑执行：
+
+```bash
+adb shell pm list packages | grep com.haoming.ipe.handteleop
+adb shell cmd package resolve-activity --brief -c android.intent.category.LAUNCHER com.haoming.ipe.handteleop
+```
+
+第一条应返回 `package:com.haoming.ipe.handteleop`，第二条应返回可启动的 Unity Activity。
+
 ## 项目结构
 
 ```text
