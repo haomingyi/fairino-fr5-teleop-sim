@@ -16,6 +16,6 @@ case "${side}" in left|right|both) ;; *) echo "FAIL: SIDE must be left, right, o
 bash "${quest_dir}/scripts/check_quest.sh"
 adb reverse "tcp:${port}" "tcp:${port}"
 adb shell am force-stop "${app_id}"
-adb shell monkey -p "${app_id}" -c android.intent.category.LAUNCHER 1 >/dev/null
+adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p "${app_id}" >/dev/null
 echo "PASS: Quest app started; IH01-only simulation SIDE=${side}, TCP Wired / localhost / ${port}."
 exec make -C "${quest_dir}" sim SIDE="${side}" HOST=127.0.0.1 PORT="${port}"

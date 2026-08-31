@@ -20,7 +20,7 @@ esac
 bash "${quest_dir}/scripts/check_quest.sh"
 adb reverse "tcp:${port}" "tcp:${port}"
 adb shell am force-stop "${app_id}"
-adb shell monkey -p "${app_id}" -c android.intent.category.LAUNCHER 1 >/dev/null
+adb shell am start -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -p "${app_id}" >/dev/null
 echo "PASS: Quest app started; choose TCP Wired / localhost / ${port} and ${mapping_hint}."
 
 exec make -C "${project_dir}" _sim-viewer LISTEN=1 SIDE="${side}" PORT="${port}"
