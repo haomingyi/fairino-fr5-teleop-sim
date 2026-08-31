@@ -295,7 +295,9 @@ def main() -> int:
                 backend = Backend(command, hardware_state, log_stream)
                 bridge = HardwareTeleopBridge(
                     backend, hardware_state, {args.side},
-                    TeleopConfig(command_rate_hz=50.0, loss_timeout_s=2.0,
+                    # Match the practical wired Quest tracking rate while
+                    # keeping the latest-frame control path low-latency.
+                    TeleopConfig(command_rate_hz=70.0, loss_timeout_s=2.0,
                                  max_delta_steps=81, speed_steps_s=args.speed),
                 )
                 backend.send(f"SPEED {max(1, min(2000, args.speed))}")

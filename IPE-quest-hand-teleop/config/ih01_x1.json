@@ -54,7 +54,7 @@
     "6": "thumb_rotate"
   },
   "hardware_teleop": {
-    "command_rate_hz": 50,
+    "command_rate_hz": 70,
     "loss_timeout_s": 2.0,
     "max_delta_steps_per_command": 81,
     "speed_steps_s": 2000,

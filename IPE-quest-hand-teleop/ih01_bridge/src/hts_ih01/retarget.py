@@ -19,6 +19,11 @@ SEMANTICS = (
     "thumb_opposition",
 )
 STEP_MAX = (1700, 1700, 1700, 1700, 1700, 1300)
+# Quest's tracked PIP/DIP angles rarely reach the theoretical 210 degree
+# span used by the old mapper.  Use a human-fist span and saturate the last
+# part so a clearly closed finger reaches the IH01 mechanical end point.
+CURL_FULL_BEND_RAD = math.radians(180.0)
+CURL_SATURATION = 0.88
 
 
 def _sub(a: Point, b: Point) -> Point:
@@ -49,7 +54,12 @@ def _clip01(value: float) -> float:
 def _curl(points: tuple[Point, ...], indices: tuple[int, int, int, int]) -> float:
     a, b, c, d = (points[index] for index in indices)
     bend = (math.pi - _angle(a, b, c)) + (math.pi - _angle(b, c, d))
-    return _clip01(bend / math.radians(210.0))
+    normalized = _clip01(bend / CURL_FULL_BEND_RAD)
+    if normalized <= 0.025:
+        return 0.0
+    if normalized >= CURL_SATURATION:
+        return 1.0
+    return normalized / CURL_SATURATION
 
 
 @dataclass(frozen=True)
@@ -76,6 +86,10 @@ class InitialRetargeter:
             opposition, quality = 0.0, 0.0
         else:
             opposition = _clip01((1.45 - _distance(points[4], points[5]) / palm_width) / 1.10)
+            if opposition <= 0.025:
+                opposition = 0.0
+            elif opposition >= 0.88:
+                opposition = 1.0
             lengths = tuple(
                 _distance(points[start], points[end])
                 for start, end in ((5, 8), (9, 12), (13, 16), (17, 20))
