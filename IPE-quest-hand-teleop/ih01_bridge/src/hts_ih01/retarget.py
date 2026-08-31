@@ -103,6 +103,18 @@ def _thumb_flex(points: tuple[Point, ...], palm_width: float) -> float:
     return _endpoint(0.35 * joint_flex + 0.65 * palm_closure, closed=0.74)
 
 
+def _thumb_opposition(points: tuple[Point, ...], palm_width: float) -> float:
+    """Map thumb opposition from the actual thumb-tip/index-tip pinch."""
+    if palm_width < 1e-9:
+        return 0.0
+    palm_axis = _clip01((1.45 - _distance(points[4], points[5]) / palm_width) / 1.10)
+    # OK is defined by the two fingertips touching; using index MCP here
+    # incorrectly reports that pose as wide open.
+    tip_ratio = _distance(points[4], points[8]) / palm_width
+    pinch = _clip01(1.0 - tip_ratio / 0.55)
+    return _endpoint(0.75 * pinch + 0.25 * palm_axis, closed=0.75)
+
+
 @dataclass(frozen=True)
 class RetargetResult:
     normalized: tuple[float, float, float, float, float, float]
@@ -126,7 +138,7 @@ class InitialRetargeter:
             return
         try:
             payload = json.loads(self._calibration_path.read_text(encoding="utf-8"))
-            if payload.get("format") != "ih01_quest_personal_calibration_v1":
+            if payload.get("format") != "ih01_quest_personal_calibration_v2":
                 return
             for side in ("left", "right"):
                 entry = payload.get("hands", {}).get(side, {})
@@ -144,7 +156,7 @@ class InitialRetargeter:
             return
         self._calibration_path.parent.mkdir(parents=True, exist_ok=True)
         payload = {
-            "format": "ih01_quest_personal_calibration_v1",
+            "format": "ih01_quest_personal_calibration_v2",
             "hands": {
                 side: {kind: list(values) for kind, values in poses.items()}
                 for side, poses in self._calibration.items()
@@ -250,11 +262,7 @@ class InitialRetargeter:
         if palm_width < 1e-6:
             opposition, quality = 0.0, 0.0
         else:
-            opposition = _clip01((1.45 - _distance(points[4], points[5]) / palm_width) / 1.10)
-            if opposition <= 0.025:
-                opposition = 0.0
-            elif opposition >= 0.88:
-                opposition = 1.0
+            opposition = _thumb_opposition(points, palm_width)
             lengths = tuple(
                 _distance(points[start], points[end])
                 for start, end in ((5, 8), (9, 12), (13, 16), (17, 20))

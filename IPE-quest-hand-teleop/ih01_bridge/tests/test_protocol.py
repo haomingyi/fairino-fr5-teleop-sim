@@ -1,7 +1,7 @@
 from collections import deque
 
 from hts_ih01.protocol import HandStreamAssembler, parse_hts_line
-from hts_ih01.retarget import InitialRetargeter, _finger_flex, _thumb_flex
+from hts_ih01.retarget import InitialRetargeter, _finger_flex, _thumb_flex, _thumb_opposition
 
 
 def test_parse_and_assemble_left_hand() -> None:
@@ -55,6 +55,15 @@ def test_thumb_palm_closure_can_reach_full_flex() -> None:
     points[13] = (0.15, 0.0, 0.0)
     points[17] = (0.5, 0.0, 0.0)
     assert _thumb_flex(tuple(points), 1.0) == 1.0
+
+
+def test_ok_pose_uses_thumb_tip_to_index_tip_distance() -> None:
+    points = [(0.0, 0.0, 0.0)] * 21
+    points[4] = (0.0, 0.0, 0.0)   # thumb tip
+    points[5] = (-0.5, 0.0, 0.0)  # index MCP
+    points[8] = (0.0, 0.0, 0.0)   # index tip touching thumb tip
+    points[17] = (0.5, 0.0, 0.0)
+    assert _thumb_opposition(tuple(points), 1.0) == 1.0
 
 
 def test_single_frame_tracking_spike_is_rejected() -> None:
