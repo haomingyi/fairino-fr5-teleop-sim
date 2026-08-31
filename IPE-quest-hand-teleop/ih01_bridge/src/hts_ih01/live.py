@@ -402,7 +402,9 @@ def main() -> int:
                     selected_side[0] = {ord("l"): "left", ord("r"): "right", ord("b"): "both"}[key]
                     cv2.setTrackbarPos("HAND MODE 0=LEFT 1=RIGHT 2=BOTH", window,
                                        side_index[selected_side[0]])
-                if bridge is not None and key == ord("e"):
+                # Accept both keyboard cases; the UI documents the safety
+                # action as `E`, while OpenCV returns the actual ASCII code.
+                if bridge is not None and key in (ord("e"), ord("E")):
                     armed = bridge.toggle(states)
                     print(
                         f"hts_arm_request side={args.side} result={armed} "
