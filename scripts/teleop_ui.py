@@ -7,6 +7,7 @@ delegated to the preserved IPE project and always asks for explicit consent.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import queue
 import subprocess
@@ -51,7 +52,7 @@ class TeleopUi(tk.Tk):
         buttons.pack(fill=tk.X)
         ttk.Button(buttons, text="启动机械臂仿真", command=lambda: self._start("arm-sim")).pack(side=tk.LEFT, padx=(0, 6))
         ttk.Button(buttons, text="机械臂 Quest 联动", command=lambda: self._start("arm-teleop")).pack(side=tk.LEFT, padx=6)
-        ttk.Button(buttons, text="灵巧手 Quest 仿真", command=lambda: self._start("hand-sim")).pack(side=tk.LEFT, padx=6)
+        ttk.Button(buttons, text="灵巧手 Quest 遥操", command=lambda: self._start("hand-teleop")).pack(side=tk.LEFT, padx=6)
         ttk.Button(buttons, text="停止", command=self._stop).pack(side=tk.LEFT, padx=6)
         ttk.Button(buttons, text="检查", command=lambda: self._start("check")).pack(side=tk.LEFT, padx=6)
         ttk.Button(buttons, text="灵巧手手动控制", command=self._hand_control).pack(side=tk.RIGHT)
@@ -73,9 +74,13 @@ class TeleopUi(tk.Tk):
             messagebox.showinfo("正在运行", "请先停止当前任务。")
             return
         side = self.mapping_mode.get()
-        self._append(f"> make {target} SIDE={side}\n")
+        self._append(f"> make {target}  [映射={side}]\n")
         self.state.set("启动中…")
-        self.process = subprocess.Popen(["make", target, f"SIDE={side}"], cwd=ROOT, text=True,
+        # Keep the command line short; pass the UI selection through the
+        # child environment so the target itself can remain interactive.
+        env = dict(os.environ)
+        env["SIDE"] = side
+        self.process = subprocess.Popen(["make", target], cwd=ROOT, env=env, text=True,
                                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         threading.Thread(target=self._read_output, daemon=True).start()
 

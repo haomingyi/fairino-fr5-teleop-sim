@@ -6,6 +6,7 @@ __pycache__/
 artifacts/*.jsonl
 *.log
 MUJOCO_LOG.TXT
+simulation/teleop_resolved.json
 config/local.yaml
 config/soft_zero.yaml
 IPE-quest-hand-teleop/.venv/

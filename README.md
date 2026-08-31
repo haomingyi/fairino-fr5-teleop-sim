@@ -54,7 +54,7 @@ make setup         # install dependencies once
 make check         # hardware-free checks
 make arm-sim       # manual simulation only
 make arm-teleop    # Quest + combined simulation
-make hand-sim      # Quest + IH01-only simulation, no FR5
+make hand-teleop   # Quest + IH01 simulation, E enables physical output
 make ui            # graphical launcher and live telemetry
 make hand-control  # retained IH01 hardware manual-control dashboard
 ```
