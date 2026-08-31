@@ -115,6 +115,13 @@ def _thumb_opposition(points: tuple[Point, ...], palm_width: float) -> float:
     return _endpoint(0.75 * pinch + 0.25 * palm_axis, closed=0.75)
 
 
+def _looks_like_fist(values: tuple[float, ...]) -> bool:
+    """Recognize a fist from long-finger closure, independent of thumb pose."""
+    long_fingers = values[:4]
+    closed_count = sum(value >= 0.62 for value in long_fingers)
+    return closed_count >= 3 and sum(long_fingers) / 4.0 >= 0.60
+
+
 @dataclass(frozen=True)
 class RetargetResult:
     normalized: tuple[float, float, float, float, float, float]
@@ -270,9 +277,15 @@ class InitialRetargeter:
             quality = _clip01(min(lengths) / max(max(lengths), 1e-6) / 0.55)
         raw = (pinky, ring, middle, index, thumb_flex, opposition)
         self._recent_raw.setdefault(frame.side, deque(maxlen=20)).append(raw)
+        mapped = self._apply_calibration(frame.side, raw)
+        # A natural fist often occludes the thumb, so its visual score can be
+        # much lower than the four long fingers. Once the fist is unambiguous,
+        # command the complete IH01 pose instead of leaving the thumb behind.
+        if _looks_like_fist(mapped):
+            mapped = (1.0,) * 6
         normalized = self._stabilize(
             frame.side,
-            self._apply_calibration(frame.side, raw),
+            mapped,
             frame.timestamp_s,
         )
         steps = tuple(round(value * maximum) for value, maximum in zip(normalized, STEP_MAX, strict=True))

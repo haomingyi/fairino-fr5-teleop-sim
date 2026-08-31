@@ -1,7 +1,7 @@
 from collections import deque
 
 from hts_ih01.protocol import HandStreamAssembler, parse_hts_line
-from hts_ih01.retarget import InitialRetargeter, _finger_flex, _thumb_flex, _thumb_opposition
+from hts_ih01.retarget import InitialRetargeter, _finger_flex, _looks_like_fist, _thumb_flex, _thumb_opposition
 
 
 def test_parse_and_assemble_left_hand() -> None:
@@ -64,6 +64,11 @@ def test_ok_pose_uses_thumb_tip_to_index_tip_distance() -> None:
     points[8] = (0.0, 0.0, 0.0)   # index tip touching thumb tip
     points[17] = (0.5, 0.0, 0.0)
     assert _thumb_opposition(tuple(points), 1.0) == 1.0
+
+
+def test_fist_override_does_not_depend_on_thumb_tracking() -> None:
+    assert _looks_like_fist((0.8, 0.7, 0.68, 0.4, 0.05, 0.1))
+    assert not _looks_like_fist((0.8, 0.1, 0.1, 0.1, 0.8, 0.8))
 
 
 def test_single_frame_tracking_spike_is_rejected() -> None:
