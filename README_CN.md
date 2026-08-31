@@ -17,7 +17,7 @@ make setup       # 首次安装
 make arm-sim     # 单独打开 FR5 + IH01 仿真
 ```
 
-Quest 已安装并通过 USB 授权后，只需：
+Quest 已安装 APK 并通过 USB 授权后，只需：
 
 ```bash
 make arm-teleop
@@ -28,6 +28,19 @@ make arm-teleop
 
 在 `make ui` 的入口界面可选三种映射：右手（右腕+右手指）、左手（左腕+左手指）、双手（右腕控制 FR5、左手指控制 IH01）。也可在需要时通过 `make sim-teleop SIDE=left` 或 `SIDE=both` 选择。
 默认坐标映射已调整为更符合站在机器人前方操作的方向：手向前对应 FR5 向前、手向右对应机器人横向、手向上对应末端上升。首次进入时仍会以当前手腕位置作为零点；若安装位置或操作者站位不同，应在 [teleop.yaml](config/teleop.yaml) 中完成现场标定后再用于真机。
+
+## Quest 3 首次安装（新头显或换电脑）
+
+`make install` 才会把 APK 安装到 Quest 3；`make reverse` 不安装程序，只建立电脑与头显之间的 `localhost:8000` 通道。首次使用请在手机 Meta Horizon App 开启开发者模式，用 USB-C 连接并解锁 Quest 3，在头显弹窗中允许 USB 调试并勾选始终允许。
+
+```bash
+cd /home/hzm/yyy/fairino-fr5-vr/IPE-quest-hand-teleop
+make status      # 检查 adb 授权，必须显示 device
+make install     # 安装 hand_tracking_streamer.apk
+make reverse     # 建立 TCP 端口转发，不会再次安装 APK
+```
+
+看到 `Success` 和 `PASS: installed ... APK` 即表示安装完成；看到 `PASS: Quest localhost:8000 -> PC localhost:8000` 即表示通道建立成功。换另一台 Quest 3 时重复上述安装步骤即可。
 
 ## 项目结构
 

@@ -22,15 +22,18 @@ third_party/SOEM/        随项目携带的 SOEM 源码
 `Library/`、`.venv/`、`build/`、APK 和日志都是可再生成的本地文件，不提交 Git。硬件模式
 另要求 EtherCAT 网卡权限、48 V 电源和独立完成安全检查。
 
-## 一次性准备
+## 一次性准备与 Quest 3 安装
 
 ```bash
 cd experiments/IPE-quest-hand-teleop
 make bootstrap
 make check
 make unity-build       # Unity 6.5，生成自己的 APK
-make install           # Quest 已授权后安装
+make install           # 将 APK 安装到 Quest 3
+make reverse           # 仅建立 localhost:8000 TCP 转发
 ```
+
+首次使用新 Quest 3：在手机 Meta Horizon App 开启开发者模式，用 USB-C 连接并解锁头显，在头显中允许 USB 调试。先运行 `make status`，必须看到设备状态为 `device`；`make install` 输出 `Success`/`PASS: installed ... APK` 才表示 APK 已装入头显，`make reverse` 输出 `PASS: Quest localhost:8000 -> PC localhost:8000` 才表示连接通道已建立。更换头显后重复这三个命令即可。
 
 Quest 应用内选择 Left、Right 或 Both。电脑端 `SIDE` 只使用 `left`、`right`、`both` 三个
 短值；不指定时，有线/无线入口会在启动时交互选择。

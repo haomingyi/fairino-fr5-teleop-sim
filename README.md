@@ -73,6 +73,23 @@ fingers follow landmarks and the wrist follows Quest position/orientation. It
 does not load the FR5 model or any arm SDK. `make hand-control` remains the
 separate physical IH01 manual-control command.
 
+### Installing on a new Quest 3
+
+`make install` installs the APK on the headset. `make reverse` only forwards
+TCP `localhost:8000`; it does not install anything. Enable Developer Mode in
+the Meta Horizon mobile app, connect and unlock the headset, then accept the
+USB-debugging prompt. From `IPE-quest-hand-teleop/` run:
+
+```bash
+make status      # must show an authorized device
+make install     # installs hand_tracking_streamer.apk
+make reverse     # sets up the TCP reverse tunnel
+```
+
+`Success`/`PASS: installed ... APK` confirms installation; `PASS: Quest
+localhost:8000 -> PC localhost:8000` confirms the tunnel. Repeat these steps
+when replacing the headset; rebuilding the project is not required.
+
 You can also run `make hand-sim`; the launcher prompts for right, left, or
 both hands (default `right`). The running simulation keeps its HAND MODE
 control and `l`/`r`/`b` shortcuts for switching.
