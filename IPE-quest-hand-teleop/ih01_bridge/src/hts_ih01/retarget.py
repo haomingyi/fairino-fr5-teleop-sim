@@ -119,7 +119,10 @@ def _looks_like_fist(values: tuple[float, ...]) -> bool:
     """Recognize a fist from long-finger closure, independent of thumb pose."""
     long_fingers = values[:4]
     closed_count = sum(value >= 0.62 for value in long_fingers)
-    return closed_count >= 3 and sum(long_fingers) / 4.0 >= 0.60
+    # A thumbs-up has similarly curled long fingers, but both thumb channels
+    # remain near their open state. Keep that gesture out of fist override.
+    thumb_extended = values[4] < 0.18 and values[5] < 0.18
+    return closed_count >= 3 and sum(long_fingers) / 4.0 >= 0.60 and not thumb_extended
 
 
 @dataclass(frozen=True)
