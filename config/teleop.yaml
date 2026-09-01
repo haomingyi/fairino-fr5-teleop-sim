@@ -16,9 +16,10 @@ arm:
     - [0.0, 0.0, -1.0]
     - [1.0, 0.0, 0.0]
     - [0.0, -1.0, 0.0]
-  orientation_enabled: false
+  orientation_enabled: true
+  orientation_scale_deg_per_rad: [57.2958, 57.2958, 57.2958]
   max_translation_step_mm: 4.0
-  max_rotation_step_deg: 1.0
+  max_rotation_step_deg: 2.0
   workspace_mm:
     x: [-700.0, 700.0]
     y: [-700.0, 700.0]
