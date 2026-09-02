@@ -46,4 +46,39 @@ def test_attached_hand_collision_uses_arm_collision_group():
     palm = root.find(".//geom[@name='rh_palm_collision']")
     assert palm is not None
     assert palm.get("contype") == "1"
-    assert palm.get("conaffinity") == "1"
+    assert palm.get("conaffinity") == "7"
+    visual_mesh = root.find(".//geom[@mesh='rh_base_link']")
+    assert visual_mesh is not None and visual_mesh.get("contype") == "0"
+
+
+def test_palm_camera_is_forward_and_present():
+    root = ET.parse(MODEL).getroot()
+    camera = root.find(".//camera[@name='ih01_palm_camera']")
+    assert camera is not None
+    assert camera.get("quat") is not None
+
+def test_scene_has_collidable_ground_and_grasp_props():
+    root = ET.parse(MODEL).getroot()
+    ground = root.find(".//geom[@name='ground']")
+    assert ground is not None and ground.get("contype") == "2" and ground.get("conaffinity") == "7"
+    assert root.find(".//body[@name='grasp_bottle']") is not None
+    assert root.find(".//body[@name='grasp_bottle_green']") is not None
+    assert root.find(".//body[@name='grasp_box_yellow']") is not None
+    for name in ("grasp_bottle_body_geom", "grasp_bottle_neck_geom", "grasp_bottle_cap_geom",
+                 "grasp_bottle_green_body_geom", "grasp_bottle_green_neck_geom",
+                 "grasp_bottle_green_cap_geom",
+                 "grasp_box_yellow_geom"):
+        geom = root.find(f".//geom[@name='{name}']")
+        assert geom is not None and geom.get("contype") == "4" and geom.get("conaffinity") == "7"
+
+
+def test_grasp_contact_and_force_limits_are_not_silently_clipped():
+    root = ET.parse(MODEL).getroot()
+    option = root.find("option")
+    assert option.get("noslip_iterations") == "10"
+    for name in ("r_index1_joint", "r_middle1_joint", "r_ring1_joint",
+                 "r_little1_joint", "r_thumb1_joint", "r_thumb2_joint"):
+        assert root.find(f".//joint[@name='{name}']").get("actuatorfrcrange") == "-6 6"
+    for actuator in root.find("actuator"):
+        if actuator.get("name", "").startswith("rh_"):
+            assert actuator.get("forcerange") == "-6 6"

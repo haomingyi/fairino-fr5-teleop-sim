@@ -49,7 +49,7 @@
   <worldbody>
     <light pos="-0.35 -0.30 0.70" dir="0.35 0.30 -0.70" diffuse="0.92 0.90 0.86" />
     <light pos="0.45 0.25 0.55" dir="-0.45 -0.25 -0.55" diffuse="0.38 0.48 0.72" />
-    <geom type="plane" size="1.20 1.20 0.01" material="floor" contype="0" conaffinity="0" />
+    <geom name="ground" type="plane" pos="0 0 -0.01" size="1.20 1.20 0.01" material="floor" contype="1" conaffinity="3" condim="3" friction="0.8 0.1 0.01" />
     <body name="lh_hand" mocap="true" pos="-0.14 0.02 0.008" euler="3.14159265359 0 0">
       <geom type="mesh" mesh="lh_l_base_link" material="shell_white" contype="0" conaffinity="0" group="1" />
       <body name="l_thumb_yaw_Link" pos="0.020446 -0.014753 -0.058386">
@@ -69,10 +69,10 @@
               <joint name="l_thumb_3_joint" pos="0 0 0" axis="0.830459 0.557079 0" range="0 1.39626" actuatorfrcrange="-2 2" stiffness="0.12" springref="0" damping="0.18" />
               <geom type="mesh" mesh="lh_l_thumb_3_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
               <site name="lh_l_thumb_3_joint_axis" type="cylinder" pos="0 0 0" quat="0.70710678 -0.3939145 0.58722344 0" size="0.0048 0.0085" material="joint_metal" group="2" />
-              <geom name="lh_l_thumb_3_Link_collision" type="capsule" fromto="0 0 0 0.013 -0.0195 -0.0172" size="0.0095" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+              <geom name="lh_l_thumb_3_Link_collision" type="capsule" fromto="0 0 0 0.013 -0.0195 -0.0172" size="0.0095" contype="1" conaffinity="3" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
             </body>
             <site name="lh_l_thumb_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.70710678 -0.3939145 0.58722344 0" size="0.0048 0.0085" material="joint_metal" group="2" />
-            <geom name="lh_l_thumb_2_Link_collision" type="capsule" fromto="0 0 0 0.010875 -0.016212 -0.010673" size="0.0095" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+            <geom name="lh_l_thumb_2_Link_collision" type="capsule" fromto="0 0 0 0.010875 -0.016212 -0.010673" size="0.0095" contype="1" conaffinity="3" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
           </body>
           <site name="lh_l_thumb_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.70710678 -0.3939145 0.58722344 0" size="0.0048 0.0085" material="joint_metal" group="2" />
         </body>
@@ -87,7 +87,7 @@
           <joint name="l_index_2_joint" pos="0 0 0" axis="-0.999292 -0 -0.0376151" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
           <geom type="mesh" mesh="lh_l_index_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
           <site name="lh_l_index_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.69368036 0 -0.72028297 0" size="0.0048 0.0085" material="joint_metal" group="2" />
-          <geom name="lh_l_index_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.043" size="0.008" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+          <geom name="lh_l_index_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.043" size="0.008" contype="1" conaffinity="3" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
         </body>
         <site name="lh_l_index_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.69368036 -0 -0.72028297 0" size="0.0048 0.0085" material="joint_metal" group="2" />
       </body>
@@ -100,7 +100,7 @@
           <joint name="l_middle_2_joint" pos="0 0 0" axis="-0.999995 -0 0.00323982" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
           <geom type="mesh" mesh="lh_l_middle_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
           <site name="lh_l_middle_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.7082513 0 -0.7059604 0" size="0.0048 0.0085" material="joint_metal" group="2" />
-          <geom name="lh_l_middle_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.048" size="0.008" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+          <geom name="lh_l_middle_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.048" size="0.008" contype="1" conaffinity="3" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
         </body>
         <site name="lh_l_middle_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.7082513 -0 -0.7059604 0" size="0.0048 0.0085" material="joint_metal" group="2" />
       </body>
@@ -113,7 +113,7 @@
           <joint name="l_ring_2_joint" pos="0 0 0" axis="-0.996195 -0 0.0871564" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
           <geom type="mesh" mesh="lh_l_ring_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
           <site name="lh_l_ring_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.73727755 0 -0.67558998 0" size="0.0048 0.0085" material="joint_metal" group="2" />
-          <geom name="lh_l_ring_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.043" size="0.008" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+          <geom name="lh_l_ring_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.043" size="0.008" contype="1" conaffinity="3" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
         </body>
         <site name="lh_l_ring_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.7245788 -0 -0.68919196 0" size="0.0048 0.0085" material="joint_metal" group="2" />
       </body>
@@ -126,11 +126,11 @@
           <joint name="l_little_2_joint" pos="0 0 0" axis="-0.996195 -0 0.0871564" range="0 1.5708" actuatorfrcrange="-2 2" stiffness="0.16" springref="0" damping="0.20" />
           <geom type="mesh" mesh="lh_l_little_2_Link" material="shell_blue_tip" contype="0" conaffinity="0" group="1" />
           <site name="lh_l_little_2_joint_axis" type="cylinder" pos="0 0 0" quat="0.73727755 0 -0.67558998 0" size="0.0048 0.0085" material="joint_metal" group="2" />
-          <geom name="lh_l_little_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.039" size="0.008" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+          <geom name="lh_l_little_2_Link_collision" type="capsule" fromto="0 0 0 0 0 -0.039" size="0.008" contype="1" conaffinity="3" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
         </body>
         <site name="lh_l_little_1_joint_axis" type="cylinder" pos="0 0 0" quat="0.73727755 -0 -0.67558998 0" size="0.0048 0.0085" material="joint_metal" group="2" />
       </body>
-      <geom name="lh_palm_collision" type="box" pos="0 -0.013 -0.073" size="0.052 0.014 0.052" contype="1" conaffinity="1" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
+      <geom name="lh_palm_collision" type="box" pos="0 -0.013 -0.073" size="0.052 0.014 0.052" contype="1" conaffinity="3" condim="3" friction="0.7 0.03 0.005" margin="0.0008" rgba="0 0 0 0" group="4" />
     </body>
     <body name="rh_hand" mocap="true" pos="0.14 0.02 0.008" euler="3.14159265359 0 0">
       <geom type="mesh" mesh="rh_base_link" material="shell_white" contype="0" conaffinity="0" group="1" />

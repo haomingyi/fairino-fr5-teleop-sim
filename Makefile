@@ -6,16 +6,17 @@ MUJOCO_PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,$(if $(wildc
 SIDE ?= right
 PORT ?= 8000
 LISTEN ?= 0
+CONTROL_FILE ?=
 
-.PHONY: help setup check arm-sim arm-teleop sim sim-teleop hand-teleop hand-hardware ui hand-control _sim-viewer
+.PHONY: help setup check arm-sim arm-teleop hand-teleop ui hand-control _sim-viewer
 
 help:
 	@echo "FR5 + IH01 + Quest 3"
 	@echo "  make setup         install local simulation dependencies (once)"
 	@echo "  make check         run hardware-free project checks"
 	@echo "  make arm-sim       open manual FR5 + IH01 simulation"
-	@echo "  make arm-teleop    start Quest app and the linked simulation"
-	@echo "  make hand-teleop  Quest 3 -> physical IH01 only (prompts for hand)"
+	@echo "  make arm-teleop    open clutch panel and linked simulation (Quest app stays in headset)"
+	@echo "  make hand-teleop  Quest 3 -> IH01 sim + optional hardware (prompts mapping)"
 	@echo "  make ui            open the simple simulation dashboard"
 	@echo "  make hand-control  open the preserved IH01 manual-control console"
 
@@ -24,21 +25,22 @@ setup:
 	.venv/bin/pip install -e '.[dev,sim]'
 
 check:
+	$(PYTHON) scripts/check_portability.py
 	$(PYTHON) scripts/generate_combined_mujoco.py
 	$(PYTHON) -m compileall -q src tests scripts
 	PYTHONPATH=src $(PYTHON) -m pytest
 	PYTHONPATH=src $(MUJOCO_PYTHON) -m fairino_fr5_vr.combined_sim --headless
 
-arm-sim sim: _sim-viewer
+arm-sim: _sim-viewer
 
 _sim-viewer:
 	$(PYTHON) scripts/generate_combined_mujoco.py
-	PYTHONPATH=src $(MUJOCO_PYTHON) -m fairino_fr5_vr.combined_sim $(if $(filter 1,$(LISTEN)),--listen --host 127.0.0.1 --port "$(PORT)" --side "$(SIDE)")
+	PYTHONPATH=src $(MUJOCO_PYTHON) -m fairino_fr5_vr.combined_sim $(if $(filter 1,$(LISTEN)),--listen --host 127.0.0.1 --port "$(PORT)" --side "$(SIDE)",--no-grasp-props) $(if $(CONTROL_FILE),--control-file "$(CONTROL_FILE)")
 
-arm-teleop sim-teleop:
+arm-teleop:
 	bash scripts/start_sim_teleop.sh
 
-hand-teleop hand-hardware:
+hand-teleop:
 	$(MAKE) -C IPE-quest-hand-teleop wired-hardware $(if $(filter command line override,$(origin SIDE)),SIDE="$(SIDE)")
 
 ui:

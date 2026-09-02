@@ -25,6 +25,8 @@ class TeleopUi(tk.Tk):
         self.title("FR5 + IH01 Quest 仿真控制台")
         self.geometry("850x590")
         self.process: subprocess.Popen[str] | None = None
+        self.extra_processes: list[subprocess.Popen[str]] = []
+        self._closing = False
         self.lines: queue.Queue[str] = queue.Queue()
         self.state = tk.StringVar(value="待机：仅仿真，不连接 FR5 真机")
         self.target = tk.StringVar(value="—")
@@ -36,6 +38,11 @@ class TeleopUi(tk.Tk):
         self.after(100, self._drain)
         self.after(60_000, self._refresh_sudo_ticket)
         self.protocol("WM_DELETE_WINDOW", self._close)
+        # Ctrl+C in the terminal raises SIGINT outside Tk's normal window
+        # callback. Route it through the same cleanup path as window close so
+        # MuJoCo and the arm teleop panel cannot be orphaned.
+        signal.signal(signal.SIGINT, self._signal_shutdown)
+        signal.signal(signal.SIGTERM, self._signal_shutdown)
 
     def _build(self) -> None:
         root = ttk.Frame(self, padding=12)
@@ -130,7 +137,23 @@ class TeleopUi(tk.Tk):
 
     def _stop(self) -> None:
         if self.process is not None and self.process.poll() is None:
-            os.killpg(self.process.pid, signal.SIGTERM); self.state.set("正在停止…")
+            try:
+                os.killpg(self.process.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+            self.state.set("正在停止…")
+            self.after(800, self._force_stop)
+
+    def _force_stop(self) -> None:
+        if self.process is not None and self.process.poll() is None:
+            try:
+                os.killpg(self.process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+
+    def _signal_shutdown(self, _signum, _frame) -> None:
+        if not self._closing:
+            self.after_idle(self._close)
 
     def _estop(self) -> None:
         """Stop the active process and make the safety action unmistakable."""
@@ -143,10 +166,22 @@ class TeleopUi(tk.Tk):
 
     def _hand_control(self) -> None:
         if messagebox.askyesno("确认", "将启动 IH01 EtherCAT 手动控制台。确认急停可用且只连接预期从站？"):
-            subprocess.Popen(["make", "hand-control", f"SIDE={self.mapping_mode.get()}"], cwd=ROOT)
+            child = subprocess.Popen(["make", "hand-control", f"SIDE={self.mapping_mode.get()}"],
+                                     cwd=ROOT, process_group=0)
+            self.extra_processes.append(child)
 
     def _close(self) -> None:
-        self._stop(); self.destroy()
+        if self._closing:
+            return
+        self._closing = True
+        self._stop()
+        for child in self.extra_processes:
+            if child.poll() is None:
+                try:
+                    os.killpg(child.pid, signal.SIGTERM)
+                except ProcessLookupError:
+                    pass
+        self.destroy()
 
 
 if __name__ == "__main__":

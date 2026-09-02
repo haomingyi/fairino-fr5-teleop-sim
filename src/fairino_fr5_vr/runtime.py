@@ -19,7 +19,8 @@ class Pipeline:
         arm_cfg = dict(cfg["arm"])
         arm_cfg["quest_sign"] = quest[f"{self.arm_side}_handed_position_sign"]
         self.arm = WristArmMapper(arm_cfg); hand = cfg["hand"]
-        self.hand = IH01Mapper(hand["channel_max_steps"], hand["max_step_delta_per_frame"])
+        self.hand = IH01Mapper(hand["channel_max_steps"], hand["max_step_delta_per_frame"],
+                               hand.get("mapping_gain", 1.0))
         self.robot_anchor, self.record_path, self._anchored = tuple(robot_anchor), record, False
         self._last_arm = None
         self._last_hand = None

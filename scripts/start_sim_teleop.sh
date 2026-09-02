@@ -7,7 +7,16 @@ set -euo pipefail
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 quest_dir="${project_dir}/IPE-quest-hand-teleop"
 port="${PORT:-8000}"
-side="${SIDE:-right}"
+side="${SIDE:-}"
+
+if [[ -z "${side}" ]]; then
+  read -r -p "选择 Quest 映射 [r=右手, l=左手, b=双手] (默认 r): " side
+fi
+case "${side:-r}" in
+  r|right) side="right" ;;
+  l|left) side="left" ;;
+  b|both) side="both" ;;
+esac
 
 [[ -d "${quest_dir}" ]] || { echo "FAIL: missing IPE Quest Hand Teleop project" >&2; exit 2; }
 case "${side}" in
@@ -21,4 +30,29 @@ bash "${quest_dir}/scripts/check_quest.sh"
 adb reverse "tcp:${port}" "tcp:${port}"
 echo "PASS: transport ready; manually start Quest app and choose TCP Wired / localhost / ${port} (${mapping_hint})."
 
-exec make -C "${project_dir}" _sim-viewer LISTEN=1 SIDE="${side}" PORT="${port}"
+control_file="$(mktemp "/tmp/fr5-arm-teleop-${UID}-XXXXXX.json")"
+panel_pid=""
+sim_pid=""
+cleanup() {
+  [[ -z "${panel_pid}" ]] || kill "${panel_pid}" 2>/dev/null || true
+  [[ -z "${sim_pid}" ]] || kill "${sim_pid}" 2>/dev/null || true
+  rm -f "${control_file}" "${control_file}.status" "${control_file}.tmp" \
+    "${control_file}.status.tmp"
+}
+trap cleanup EXIT INT TERM
+
+# Start MuJoCo first, then start the panel last so it owns keyboard focus;
+# E/Space are intentionally handled by the panel, not by the viewer.
+make -C "${project_dir}" _sim-viewer LISTEN=1 SIDE="${side}" PORT="${port}" CONTROL_FILE="${control_file}" &
+sim_pid=$!
+sleep 0.8
+python3 "${project_dir}/scripts/arm_teleop_panel.py" \
+  --control-file "${control_file}" --side "${side}" &
+panel_pid=$!
+
+# End the session when either the viewer or the panel closes.
+set +e
+wait -n "${sim_pid}" "${panel_pid}"
+session_status=$?
+set -e
+exit "${session_status}"

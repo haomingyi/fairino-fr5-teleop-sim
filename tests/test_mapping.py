@@ -1,6 +1,7 @@
 from fairino_fr5_vr.arm_mapping import WristArmMapper
 from fairino_fr5_vr.hand_mapping import IH01Mapper
 from fairino_fr5_vr.protocol import HandFrame
+import math
 def frame(x=0.0):
     points=tuple((0.01*(i%4),0.02*(i//4),0.003*i) for i in range(21))
     return HandFrame("right",(x,0.0,0.0),(0,0,0,1),points,1.0)
@@ -20,6 +21,36 @@ def test_arm_mapping_propagates_wrist_orientation():
     turned = HandFrame("right", (0, 0, 0), (0, 0, 0.258819, 0.965926), frame().landmarks, 1.1)
     target = m.map(turned)
     assert target is not None and abs(target.pose_mm_deg[5]) >= 20
+
+def test_arm_mapping_does_not_accumulate_anchor_delta():
+    m = WristArmMapper({"quest_sign": [1, -1, 1], "translation_scale_mm_per_m": [1000] * 3,
+                        "axis_matrix": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+                        "max_translation_step_mm": 100, "max_rotation_step_deg": 100,
+                        "workspace_mm": {"x": [-700, 700], "y": [-700, 700], "z": [0, 1000]}})
+    m.anchor(frame(), (0, 0, 10, 0, 0, 0))
+    target = m.map(frame(0.01))
+    for _ in range(20):
+        target = m.map(frame(0.01))
+    assert target is not None and abs(target.pose_mm_deg[0] - 10.0) < 1e-6
+
+def test_right_hand_rotation_respects_reflected_coordinate_handedness():
+    cfg = {"quest_sign": [1, -1, 1], "translation_scale_mm_per_m": [500] * 3,
+           "axis_matrix": [[0, 0, -1], [1, 0, 0], [0, -1, 0]],
+           "orientation_enabled": True, "max_rotation_step_deg": 100,
+           "workspace_mm": {"x": [-700, 700], "y": [-700, 700], "z": [0, 1000]},
+           "max_translation_step_mm": 100}
+    half = math.radians(15)
+    # Positive Quest Z rotation maps to positive FR5 roll after applying the
+    # extra axial-vector sign required by the reflected right-hand transform.
+    turned = HandFrame("right", (0, 0, 0), (0, 0, math.sin(half), math.cos(half)),
+                       frame().landmarks, 1.1)
+    mapper = WristArmMapper(cfg)
+    mapper.anchor(frame(), (0, 0, 10, 0, 0, 0))
+    target = mapper.map(turned)
+    assert target is not None
+    assert target.pose_mm_deg[3] > 29.0
+    assert abs(target.pose_mm_deg[4]) < 1e-6 and abs(target.pose_mm_deg[5]) < 1e-6
+
 def test_hand_steps_stay_in_ranges():
     m=IH01Mapper([1700]*5+[1300],81); first=m.map(frame()); second=m.map(frame())
     assert all(0<=v<=limit for v,limit in zip(second.steps,[1700]*5+[1300]))

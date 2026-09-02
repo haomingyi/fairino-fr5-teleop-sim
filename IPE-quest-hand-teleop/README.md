@@ -48,7 +48,7 @@ USB 连接 Quest、解锁并允许 USB 调试后：
 make wired-sim                 # 启动电脑端仿真，Quest 应用手动打开
 ```
 
-该命令依次安装 APK、建立 ADB reverse，再打开 MuJoCo 接收器；不会通过 ADB 强制启动应用，
+该命令只检查 Quest、建立 ADB reverse，再打开 MuJoCo 接收器；不会安装、关闭或通过 ADB 强制启动应用，
 也不发送 EtherCAT 命令。请在 Quest 3 中手动打开应用，网络设置为 **TCP Wired / localhost / 8000**。
 需要自动启动头显应用时才单独运行 `make launch`；分步调试可使用 `make install`、`make reverse`、
 `make sim SIDE=left`。
@@ -89,7 +89,9 @@ make wireless-sim SIDE=both HOST=0.0.0.0
 
 ### Quest + MuJoCo + 实体 IH01
 
-实体模式当前一次只控制一只手。由于左右手从站身份相同，入口会询问物理手的方向：
+入口允许选择左手、右手或双手映射，进入后始终先显示仿真。实体输出仍由 EtherCAT
+反馈门控：当前单从站配置下，双手映射不会擅自把一个从站复制给两只手；按 `E` 时若
+缺少所选实体手、WKC/故障状态不满足，界面只提示原因并保持仿真运行：
 
 ```bash
 make wired-hardware
@@ -97,7 +99,7 @@ make wired-hardware
 
 启动后默认为 `DISARMED`。确认 EtherCAT 为 `OP`、WKC 正常且反馈数值持续更新后按 `E`
 启用目标发送；再次按 `E` 可停用。
-实体模式不能使用 `SIDE=both`。窗口快捷键：`q`/`Esc` 退出，空格暂停，`r` 清故障。
+窗口快捷键：`q`/`Esc` 退出，空格暂停，`r` 清故障。
 面板会同时显示视觉目标和实体反馈（位置、电流、力、温度、故障码）。
 
 面板底部提供两条可直接拖动的速度控制：`FOLLOW SPEED`（1～100 steps/frame）调整视觉

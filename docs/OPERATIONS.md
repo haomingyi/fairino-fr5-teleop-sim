@@ -2,20 +2,32 @@
 
 ## Hardware-free gate
 
-Run `make verify`, `make demo`, then replay a recorded Quest session. Confirm
+Run `make check`, then replay a recorded Quest session if available. Confirm
 hand selection, coordinate directions, rate, dropouts, workspace and all six
 IH01 channel directions before connecting hardware.
 
-Run `make sim-check` for headless combined-model validation. Run `make arm-sim` for
-the scripted viewer, or `make arm-teleop SIDE=right` after ADB reverse to drive
-the simulated arm and attached right hand from Quest. The simulator uses
-translation-only IK; orientation remains deliberately disabled.
+Run `make arm-sim` for the manual viewer, or `make arm-teleop` after ADB reverse to drive the
+simulated arm and attached right hand from Quest. The simulator uses 6D pose IK.
+Press `E` to start/pause/resume and Space to return to Ready; pause and resume always
+re-anchor the current wrist and robot poses. Never use always-follow for
+physical commissioning.
+
+Use the panel's `Ready` button before a new trial or after an unexpected pose;
+it disarms the panel, opens the simulated hand, and returns the simulation to
+`ARM_HOME`. The wrist mapper forms targets from the current clutch anchor and
+applies translation/rotation slew limits, so repeated Quest deltas cannot
+accumulate into drift.
 
 ## Quest gate
 
-For wired TCP run `adb reverse tcp:8000 tcp:8000`, start `make listen`, then
-stream. A pass requires complete wrist+landmark frames; ADB authorization or an
-open TCP socket alone is not a pass.
+For wired TCP run `cd IPE-quest-hand-teleop && make reverse`, start the Quest
+application manually, and then launch `make arm-teleop`. A pass requires
+complete wrist+landmark frames; ADB authorization or an open TCP socket alone
+is not a pass.
+
+`arm-teleop` does not launch `scrcpy`; use the headset view for operator
+confirmation. This avoids treating protected immersive-compositor capture as a
+teleoperation or TCP failure.
 
 ## FR5 read-only gate
 

@@ -1,126 +1,102 @@
 # FAIRINO FR5 + Quest 3 + IH01 Teleoperation
 
-[English](README.md) | [中文](README_CN.md)
+[中文说明](README_CN.md)
 
-A portable, safety-gated project for controlling one FAIRINO FR5 arm and one
-IH01 dexterous hand from Meta Quest 3 hand tracking. Quest wrist motion drives
-the arm; the 21 OpenXR hand landmarks drive the six active IH01 channels.
+This repository is a portable, safety-gated integration of a FAIRINO FR5 arm,
+an IH01 dexterous hand, and Meta Quest 3 hand tracking. The bundled
+`IPE-quest-hand-teleop/` directory contains the Quest receiver, IH01 model,
+and EtherCAT path; no sibling checkout is required at runtime.
 
-The default workflow is simulation-only and keeps FR5 real output locked. The
-separate `IPE-quest-hand-teleop/` project retains IH01 EtherCAT checks and its
-explicit arming workflow.
+The default path is simulation-only. Real FR5 output is not enabled by these
+commands, and IH01 hardware remains disarmed until the operator explicitly
+arms it.
 
-## Quick start (no hardware)
-
-```bash
-cd /home/hzm/yyy/fairino-fr5-vr
-make setup       # first time only
-make arm-sim     # open FR5 + IH01 simulation
-```
-
-Once the Quest app is installed, USB-authorized, and connected, run only:
+## Quick start
 
 ```bash
-make arm-teleop
+make setup       # once: create the local virtual environment
+make check       # hardware-free validation
+make arm-sim     # manual FR5 + IH01 MuJoCo viewer
+make arm-teleop  # Quest-linked simulation and control panel
 ```
 
-It checks the Quest, sets up ADB reverse, starts the IPE Quest Hand Teleop app,
-and opens the combined simulation. Select **TCP Wired / localhost / 8000** in
-the headset. Right-wrist translation drives FR5 numerical IK and landmarks
-drive the attached IH01-X1-R; orientation awaits measured registration.
+Start the Quest application manually and select `TCP Wired / localhost / 8000`.
+`make arm-teleop` checks ADB and creates the reverse tunnel; it does not launch,
+close, or mirror the Quest activity. Select right, left, or both hands in the
+prompt or in the panel. Press `E` to start, press `E` again to pause/resume, and
+press `Space` to return to the authored Ready pose and disarm. `Esc` and the
+red E-stop latch stop the local session.
 
-The `make ui` entry screen offers right-hand (right wrist + fingers), left-hand
-(left wrist + fingers), and bimanual (right wrist -> FR5, left fingers -> IH01)
-routes. Advanced selection is also available as `make sim-teleop SIDE=left` or
-`SIDE=both`.
-
-## Project layout
+## Canonical commands
 
 ```text
-src/fairino_fr5_vr/    protocol, mappings, safety gate, runtime and adapters
-config/teleop.yaml     portable Quest/FR5/IH01 mapping and safety settings
-docs/                  architecture, calibration, operation and safety gates
-tests/                 hardware-free protocol/mapping/safety tests
-scripts/               retained FR5 teach UI and diagnostic tools
-third_party/           FAIRINO Python SDK with upstream license
-IPE-quest-hand-teleop/ retained Quest/IH01 integration snapshot
+make setup         install local dependencies
+make check         run portability, model, compile, test, and headless checks
+make arm-sim       manual simulation; no Quest or hardware required
+make arm-teleop    Quest wrist/hand mapping to the combined simulation
+make hand-teleop   Quest mapping with optional physical IH01 output
+make ui            graphical launcher and live telemetry
+make hand-control  preserved IH01 manual-control dashboard
 ```
 
-## Commands
+`make arm-sim` starts in a stable manual mode. `q/a`, `w/s`, `e/d`, `r/f`,
+`t/g`, and `y/h` jog FR5 J1–J6; `0` returns to Ready and `o/c` opens/closes the
+hand. The viewer includes a floor, two narrow square bottles, a yellow box,
+MuJoCo contacts, and a fixed lower-right palm-camera picture-in-picture. The
+panel can move a selected prop by 20 mm on X/Y/Z. `arm-sim` hides the props when
+the goal is only to inspect arm joints.
+
+The Quest mapper uses a wrist-anchor Cartesian target, orientation signs,
+translation/rotation slew limits, and a bounded workspace. The target is the
+mounted IH01 palm-center TCP, not a copied human shoulder or elbow angle. Tune
+`config/teleop.yaml` only after checking one axis at a time; the default arm
+translation scale is 1.60 and the default translation speed is 220 mm/s.
+
+`make hand-teleop` always starts with simulation visible and keeps output
+disarmed. Pressing `E` requests physical IH01 output; if no valid EtherCAT hand
+is detected, the UI reports the reason and remains in simulation. The separate
+`make hand-control` command is retained for direct IH01 manual control. IH01
+contact protection holds a channel when current reaches 1000 mA or a stall lasts
+200 ms, and releases when the target is backed off; thumb-index soft coupling is
+not used.
+
+## Quest 3 installation
+
+Enable Developer Mode in the Meta Horizon mobile app, connect and unlock the
+headset, and accept USB debugging. From the bundled project:
 
 ```bash
-make help
-make setup         # install dependencies once
-make check         # hardware-free checks
-make arm-sim       # manual simulation only
-make arm-teleop    # Quest + combined simulation
-make hand-teleop   # Quest + IH01 simulation, E enables physical output
-make ui            # graphical launcher and live telemetry
-make hand-control  # retained IH01 hardware manual-control dashboard
+cd IPE-quest-hand-teleop
+make status      # must report an authorized device
+make install     # install hand_tracking_streamer.apk
+make reverse     # forward Quest localhost:8000 to the PC
 ```
 
-The standalone viewer starts in manual mode: `q/a`, `w/s`, `e/d`, `r/f`, `t/g`,
-`y/h` jog J1-J6 respectively, `0` resets the arm,
-`o/c` open/close the hand, and Space pauses/resumes. The terminal prints joint
-angles and IH01 position every 0.5 s. The UI can start/stop simulation, start Quest-linked simulation, show mapped
-Quest target, simulated IH01 position, Cartesian error and IK error. Its
-manual-hand button asks again for confirmation and then delegates to the
-preserved IH01 console.
+`make reverse` never installs an APK. The current Unity package is
+`com.haoming.ipe.handteleop`; `make unity-build` requires Unity 6 and only
+builds the APK. After rebuilding, run `make install` explicitly. To replace an
+already installed APK use `FORCE_INSTALL=1 make install`; this may restart a
+running activity. In the Quest app library choose **Unknown Sources** if the
+application is not shown.
 
-For hand teleoperation, use `make hand-teleop`; it opens the IH01 simulation
-mirror, prompts for the hand, and keeps the physical output disarmed until `E`
-is pressed. `make hand-control` remains the separate manual-control command.
+## Layout and boundaries
 
-For Quest-to-physical-IH01 teleoperation, use `make hand-teleop`. It prepares the
-computer-side receiver and keeps output disarmed until `E` is pressed; start the
-Quest app manually in the headset to preserve its tracking origin. `make launch`
-remains available when ADB auto-launch is explicitly desired.
-
-### Installing on a new Quest 3
-
-`make install` installs the APK on the headset. `make reverse` only forwards
-TCP `localhost:8000`; it does not install anything. Enable Developer Mode in
-the Meta Horizon mobile app, connect and unlock the headset, then accept the
-USB-debugging prompt. From `IPE-quest-hand-teleop/` run:
-
-```bash
-make status      # must show an authorized device
-make install     # installs hand_tracking_streamer.apk
-make reverse     # sets up the TCP reverse tunnel
+```text
+src/fairino_fr5_vr/    protocol, mapping, safety gate, runtime, adapters
+config/teleop.yaml     portable Quest/FR5/IH01 mapping and limits
+scripts/               launchers, UI, model generation, and FR5 diagnostics
+simulation/            generated combined MuJoCo model and resolved config
+docs/                  architecture, operation, provenance, and audit notes
+tests/                 hardware-free regression tests
+third_party/           FAIRINO SDK with its upstream license
+IPE-quest-hand-teleop/ Quest/IH01 integration component
 ```
 
-`Success`/`PASS: installed ... APK` confirms installation; `PASS: Quest
-localhost:8000 -> PC localhost:8000` confirms the tunnel. Repeat these steps
-when replacing the headset; rebuilding the project is not required.
+`make check` runs `scripts/check_portability.py`, which rejects external local
+paths, external symlinks, or missing bundled runtime dependencies. The MuJoCo
+collision and penetration checks are simulation safeguards only; they are not a
+certified FR5 safety function. Read [docs/OPERATIONS.md](docs/OPERATIONS.md)
+before connecting hardware and keep the physical E-stop accessible.
 
-If you modify the Unity project, rebuild first with `make unity-build` (Unity
-6 required), then run `make install` and `make reverse` again.
-
-The `make hand-teleop` window keeps its HAND MODE control and `l`/`r`/`b`
-shortcuts for switching the simulated hand view. Pressing `E` requests physical
-IH01 output; if no hand is connected, the UI reports the error and remains in
-simulation mode.
-
-Read [docs/OPERATIONS.md](docs/OPERATIONS.md) before hardware use. The
-integrated runtime intentionally defaults to dry-run. The FR5 SDK adapter is a
-commissioning interface, not an enabled default. IH01 hardware remains in the
-reviewed, independently armed runtime documented in
-`IPE-quest-hand-teleop/README.md`.
-
-## Validation boundary
-
-- Supported now: parsing, frame assembly, wrist anchoring, Cartesian clamping
-  and slew limiting, IH01 geometry mapping, timeout gate, record/replay, and
-  deterministic dry-run verification. The combined MuJoCo model has 6 FR5
-  joints, the attached IH01-X1-R joint tree, 12 actuators, and numerical
-  translation IK for Quest simulation.
-- The FR5 appearance uses only FAIRINO's official V6 link meshes in white; no
-  protruding custom joint covers are added, and the official meshes are used for collision.
-- Present but not commissioned here: FAIRINO SDK output adapter.
-- Separate hardware path: IH01 EtherCAT runtime, which starts disarmed and
-  requires OP/WKC/fault checks plus an operator `E` action.
-- Not claimed: collision avoidance, certified functional safety, calibrated
-  Quest-to-robot registration, or a completed physical teleoperation trial.
-
-See [docs/PROVENANCE.md](docs/PROVENANCE.md) for upstream and license boundaries.
-The FR5 code/config audit is recorded in [docs/FR5_AUDIT_CN.md](docs/FR5_AUDIT_CN.md).
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for data flow and
+[docs/PROVENANCE.md](docs/PROVENANCE.md) for upstream/license boundaries.

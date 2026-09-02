@@ -232,8 +232,6 @@ def main() -> int:
     parser.add_argument("--speed", type=int, default=1000)
     parser.add_argument("--backend", default="build/hardware/ih01_hand_control_backend")
     args = parser.parse_args()
-    if args.hardware and args.side == "both":
-        raise SystemExit("Hardware mode supports one hand at a time; use --side left or --side right.")
     # The hardware workflow always keeps a read-only MuJoCo mirror open.
     args.simulate = bool(args.simulate or args.hardware)
     source = TcpSource(args.host, args.port)

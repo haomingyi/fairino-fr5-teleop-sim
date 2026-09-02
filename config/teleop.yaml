@@ -4,22 +4,31 @@ quest:
   mapping_mode: right
   tcp_host: 127.0.0.1
   tcp_port: 8000
-  frame_timeout_s: 0.35
+  frame_timeout_s: 0.15
   right_handed_position_sign: [1.0, -1.0, 1.0]
   left_handed_position_sign: [-1.0, -1.0, 1.0]
 arm:
   enabled: true
-  translation_scale_mm_per_m: [500.0, 500.0, 500.0]
+  translation_scale_mm_per_m: [1600.0, 1600.0, 1600.0]
   # Unity/OpenXR hand axes after Y inversion: forward -> FR5 forward (-X),
   # right -> FR5 left/right (+Y), up -> FR5 up (+Z).
   axis_matrix:
-    - [0.0, 0.0, -1.0]
-    - [1.0, 0.0, 0.0]
+    - [0.0, 0.0, 1.0]
+    - [-1.0, 0.0, 0.0]
     - [0.0, -1.0, 0.0]
   orientation_enabled: true
-  orientation_scale_deg_per_rad: [57.2958, 57.2958, 57.2958]
+  # Output roll/pitch/yaw direction trim after the Quest-to-FR5 handedness
+  # conversion. With the sideways IH01 mount, forearm pronation/supination
+  # maps to FR5 roll and needs the opposite trim from pitch/yaw.
+  orientation_axis_sign: [1.0, 1.0, 1.0]
+  orientation_scale_deg_per_rad: [45.84, 45.84, 45.84]
   max_translation_step_mm: 4.0
+  # Rate limits are independent of Quest frame rate. The per-frame limits
+  # above remain hard caps for delayed or bursty packets.
+  max_translation_speed_mm_s: 220.0
   max_rotation_step_deg: 2.0
+  max_rotation_speed_deg_s: 100.0
+  rotation_range_deg: [45.0, 45.0, 45.0]
   workspace_mm:
     x: [-700.0, 700.0]
     y: [-700.0, 700.0]
@@ -28,6 +37,7 @@ hand:
   enabled: true
   minimum_quality: 0.25
   max_step_delta_per_frame: 81
+  mapping_gain: 1.1
   channel_max_steps: [1700, 1700, 1700, 1700, 1700, 1300]
 fr5:
   ip: 192.168.58.2
@@ -38,16 +48,21 @@ fr5:
   servo_period_s: 0.008
   end_effector:
     model: IH01-X1-R
+    tcp_reference: ih01_palm_center
     approved_for_motion: false
     load_number: 1
     mass_kg: null
     center_of_mass_mm: null
     flange_to_tcp_mm_deg: null
-    # Provisional visualization transform only. Replace from adapter CAD.
+    # The Quest wrist is mapped to this mounted IH01 palm/TCP reference. The
+    # values are provisional visualization geometry; replace from adapter CAD
+    # before any real FR5 commissioning.
     # Official wrist3 origin is inside the last housing; this offset places
     # the IH01 palm beyond the flange face instead of intersecting the wrist.
     flange_to_hand_sim_xyz_m: [0.0, 0.0, 0.106]
-    flange_to_hand_sim_rpy_deg: [180.0, 0.0, 0.0]
+    # The IH01 is mounted sideways at the flange. Keep FR5 J6 at its mechanical
+    # zero and express the clockwise 90-degree installation offset here.
+    flange_to_hand_sim_rpy_deg: [180.0, 0.0, -90.0]
 safety:
   output_mode: dry-run
   stop_on_timeout: true

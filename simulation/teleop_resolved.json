@@ -3,7 +3,7 @@
     "mapping_mode": "right",
     "tcp_host": "127.0.0.1",
     "tcp_port": 8000,
-    "frame_timeout_s": 0.35,
+    "frame_timeout_s": 0.15,
     "right_handed_position_sign": [
       1.0,
       -1.0,
@@ -18,18 +18,18 @@
   "arm": {
     "enabled": true,
     "translation_scale_mm_per_m": [
-      500.0,
-      500.0,
-      500.0
+      1600.0,
+      1600.0,
+      1600.0
     ],
     "axis_matrix": [
       [
         0.0,
         0.0,
-        -1.0
+        1.0
       ],
       [
-        1.0,
+        -1.0,
         0.0,
         0.0
       ],
@@ -40,13 +40,25 @@
       ]
     ],
     "orientation_enabled": true,
+    "orientation_axis_sign": [
+      1.0,
+      1.0,
+      1.0
+    ],
     "orientation_scale_deg_per_rad": [
-      57.2958,
-      57.2958,
-      57.2958
+      45.84,
+      45.84,
+      45.84
     ],
     "max_translation_step_mm": 4.0,
+    "max_translation_speed_mm_s": 220.0,
     "max_rotation_step_deg": 2.0,
+    "max_rotation_speed_deg_s": 100.0,
+    "rotation_range_deg": [
+      45.0,
+      45.0,
+      45.0
+    ],
     "workspace_mm": {
       "x": [
         -700.0,
@@ -66,6 +78,7 @@
     "enabled": true,
     "minimum_quality": 0.25,
     "max_step_delta_per_frame": 81,
+    "mapping_gain": 1.1,
     "channel_max_steps": [
       1700,
       1700,
@@ -83,6 +96,7 @@
     "servo_period_s": 0.008,
     "end_effector": {
       "model": "IH01-X1-R",
+      "tcp_reference": "ih01_palm_center",
       "approved_for_motion": false,
       "load_number": 1,
       "mass_kg": null,
@@ -96,7 +110,7 @@
       "flange_to_hand_sim_rpy_deg": [
         180.0,
         0.0,
-        0.0
+        -90.0
       ]
     }
   },

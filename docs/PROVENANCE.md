@@ -11,8 +11,9 @@
 - FR5 kinematic origins, joint limits, masses and inertias were checked against
   FAIR-INNOVATION's official `frcobot_ros2/fairino_description/urdf/fairino5_v6.urdf`.
 - FR5 V6 visual meshes under `simulation/meshes/fr5_v6/` are copied from the
-  same official repository; their material is recolored blue locally. The
-  simulation keeps simplified analytic collision geoms for performance.
+  same official repository; their simulation material is uniform white. The
+  simulation keeps vendor meshes plus simplified collision proxies; internal
+  mating pairs are excluded while external arm/hand/prop contacts remain active.
 - Product-level payload, reach, repeatability and axis limits were checked
   against FAIRINO's official FR5 product page.
 

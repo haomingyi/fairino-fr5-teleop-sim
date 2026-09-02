@@ -54,6 +54,11 @@ class IH01Simulation:
         self._mocap_base_quaternions = {}
         self._depth_references_m: dict[str, float] = {}
         self._wrist_references_m: dict[str, np.ndarray] = {}
+        self._floor_z = -0.01
+        self._floor_clearance = 0.001
+        self._hand_collision_geom_ids: dict[str, list[int]] = {}
+        self._collision_geom_hand: dict[int, str] = {}
+        self.last_hand_collision = False
         self.fixed_wrist = bool(
             self.ih01_config.get("simulation_model", {}).get("fixed_wrist", True)
         )
@@ -69,6 +74,92 @@ class IH01Simulation:
             self._mocap_base_quaternions[handedness] = self.data.mocap_quat[
                 mocap_id
             ].copy()
+            self._hand_collision_geom_ids[handedness] = [
+                geom_id for geom_id in range(self.model.ngeom)
+                if self.model.geom_contype[geom_id] != 0
+                and self._body_is_in_hand(int(self.model.geom_bodyid[geom_id]), body_id)
+            ]
+            for geom_id in self._hand_collision_geom_ids[handedness]:
+                self._collision_geom_hand[geom_id] = handedness
+        # Ensure the authored neutral pose itself starts above the floor. This
+        # avoids a one-frame drop when the mocap body is first initialized.
+        for handedness in ("Left", "Right"):
+            self.data.mocap_pos[self._mocap_ids[handedness]] = self._mocap_base_positions[handedness]
+            self._clamp_mocap_to_floor(handedness)
+            self._mocap_base_positions[handedness] = self.data.mocap_pos[self._mocap_ids[handedness]].copy()
+
+    def _body_is_in_hand(self, body_id: int, root_id: int) -> bool:
+        """Return whether a geom body is the hand root or one of its children."""
+        while body_id >= 0:
+            if body_id == root_id:
+                return True
+            parent = int(self.model.body_parentid[body_id])
+            if parent == body_id:
+                break
+            body_id = parent
+        return False
+
+    def _clamp_mocap_to_floor(self, handedness: str) -> None:
+        """Keep every hand collision proxy above the simulated floor.
+
+        Mocap bodies are kinematic: contact forces cannot push them back when
+        their pose is teleported from vision. We therefore perform a geometric
+        floor projection after each wrist update, using MuJoCo's geom bounding
+        radii as a conservative lower bound.
+        """
+        mocap_id = self._mocap_ids[handedness]
+        geom_ids = self._hand_collision_geom_ids.get(handedness, [])
+        if not geom_ids:
+            return
+        for _ in range(2):
+            self._mujoco.mj_forward(self.model, self.data)
+            lowest = min(
+                float(self.data.geom_xpos[geom_id, 2]) - float(self.model.geom_rbound[geom_id])
+                for geom_id in geom_ids
+            )
+            correction = self._floor_z + self._floor_clearance - lowest
+            if correction <= 0.0:
+                break
+            self.data.mocap_pos[mocap_id, 2] += correction
+
+    def _separate_hands(self) -> None:
+        """Resolve left/right mocap penetration along MuJoCo contact normals.
+
+        Mocap bodies do not receive ordinary contact impulses, so two tracked
+        hands can otherwise teleport through one another. This small projected
+        Gauss-Seidel pass keeps the collision proxies outside each other while
+        retaining the tracked orientation and finger actuation.
+        """
+        self.last_hand_collision = False
+        for _ in range(4):
+            self._mujoco.mj_forward(self.model, self.data)
+            changed = False
+            for index in range(self.data.ncon):
+                contact = self.data.contact[index]
+                hand_a = self._collision_geom_hand.get(int(contact.geom1))
+                hand_b = self._collision_geom_hand.get(int(contact.geom2))
+                if hand_a is None or hand_b is None or hand_a == hand_b or contact.dist >= 0.0:
+                    continue
+                normal = np.asarray(contact.frame[:3], dtype=np.float64)
+                norm = float(np.linalg.norm(normal))
+                if norm < 1e-9:
+                    continue
+                normal /= norm
+                # Ensure normal points from geom1 toward geom2 even for mesh
+                # contacts whose frame orientation can be flipped.
+                delta = self.data.geom_xpos[int(contact.geom2)] - self.data.geom_xpos[int(contact.geom1)]
+                if float(np.dot(normal, delta)) < 0.0:
+                    normal = -normal
+                correction = -float(contact.dist) + self._floor_clearance
+                half = 0.5 * correction
+                self.data.mocap_pos[self._mocap_ids[hand_a]] -= normal * half
+                self.data.mocap_pos[self._mocap_ids[hand_b]] += normal * half
+                changed = True
+                self.last_hand_collision = True
+            if not changed:
+                break
+        self._clamp_mocap_to_floor("Left")
+        self._clamp_mocap_to_floor("Right")
 
     def set_camera_view(self, view: str) -> None:
         views = {
@@ -171,8 +262,9 @@ class IH01Simulation:
             # tracked frame to the authored hand mount, then follow Quest
             # Translation follows the Quest wrist inside a display workspace.
             # Use asymmetric vertical limits because the authored hand bases
-            # sit just above the MuJoCo floor; a symmetric +/-22 cm clamp lets
-            # either hand disappear below the ground plane.
+            # Keep the visual workspace bounded; the floor projection below
+            # additionally prevents the palm and collision proxies from
+            # passing through the ground when the wrist is moved downward.
             offset = np.clip(
                 wrist - reference,
                 np.array((-0.22, -0.18, -0.04), dtype=np.float64),
@@ -200,6 +292,7 @@ class IH01Simulation:
                 offset_y,
                 offset_z,
             )
+        self._clamp_mocap_to_floor(handedness)
         if "palm_surface" in state:
             self.last_surface[handedness] = str(state["palm_surface"])
 
@@ -239,6 +332,7 @@ class IH01Simulation:
             self._update_hand(state, dt)
             self.last_seen_s[handedness] = now
             seen.add(handedness)
+        self._separate_hands()
         for handedness in ("Left", "Right"):
             last_seen = self.last_seen_s[handedness]
             if handedness not in seen and last_seen > 0.0 and now - last_seen > 0.75:
