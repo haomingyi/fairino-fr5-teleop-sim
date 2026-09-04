@@ -18,7 +18,9 @@ CONFIG = ROOT / "simulation" / "teleop_resolved.json"
 # Neutral upright working pose: the arm and sideways-mounted IH01 match the
 # operator's requested screenshot posture used for wrist anchoring.
 # Values are radians and remain inside the official FR5 joint limits.
-ARM_HOME = (-0.0305, -1.14, -1.92, 0.0174, 1.56, 0.0)
+# Neutral bench-ready pose captured from the approved operator view.  Keep this
+# single tuple as the source for startup, the ``0`` shortcut, and panel Ready.
+ARM_HOME = (-0.0305, -0.929, -1.61, -1.54, 1.56, 0.0)
 HAND_ACTUATORS = (
     "rh_pinky_flex", "rh_ring_flex", "rh_middle_flex",
     "rh_index_flex", "rh_thumb_flex", "rh_thumb_opposition",

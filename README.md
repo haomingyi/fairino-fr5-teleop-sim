@@ -24,7 +24,8 @@ Start the Quest application manually and select `TCP Wired / localhost / 8000`.
 `make arm-teleop` checks ADB and creates the reverse tunnel; it does not launch,
 close, or mirror the Quest activity. Select right, left, or both hands in the
 prompt or in the panel. Press `E` to start, press `E` again to pause/resume, and
-press `Space` to return to the authored Ready pose and disarm. `Esc` and the
+press `Space` to return to the authored Ready pose
+(`[-0.0305, -0.929, -1.61, -1.54, 1.56, 0]` rad) and disarm. `Esc` and the
 red E-stop latch stop the local session.
 
 ## Canonical commands
