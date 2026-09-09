@@ -10,8 +10,7 @@ quest:
 arm:
   enabled: true
   translation_scale_mm_per_m: [1600.0, 1600.0, 1600.0]
-  # Unity/OpenXR hand axes after Y inversion: forward -> FR5 forward (-X),
-  # right -> FR5 left/right (+Y), up -> FR5 up (+Z).
+  # Quest forward maps to FR5 -X, lateral maps to FR5 -Y, vertical stays on Z.
   axis_matrix:
     - [0.0, 0.0, 1.0]
     - [-1.0, 0.0, 0.0]
@@ -20,7 +19,7 @@ arm:
   # Output roll/pitch/yaw direction trim after the Quest-to-FR5 handedness
   # conversion. With the sideways IH01 mount, forearm pronation/supination
   # maps to FR5 roll and needs the opposite trim from pitch/yaw.
-  orientation_axis_sign: [1.0, 1.0, 1.0]
+  orientation_axis_sign: [1.0, -1.0, 1.0]
   orientation_scale_deg_per_rad: [45.84, 45.84, 45.84]
   max_translation_step_mm: 4.0
   # Rate limits are independent of Quest frame rate. The per-frame limits

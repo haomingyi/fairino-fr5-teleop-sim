@@ -42,7 +42,7 @@
     "orientation_enabled": true,
     "orientation_axis_sign": [
       1.0,
-      1.0,
+      -1.0,
       1.0
     ],
     "orientation_scale_deg_per_rad": [
