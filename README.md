@@ -1,8 +1,6 @@
 # FAIRINO FR5 + Quest 3 + IH01 Teleoperation
 
 [中文说明](README_CN.md)
-![FAIRINO FR5 and IH01 Quest 3 teleoperation simulation](docs/assets/social-preview.png)
-
 
 This repository is a portable, safety-gated integration of a FAIRINO FR5 arm,
 an IH01 dexterous hand, and Meta Quest 3 hand tracking. The bundled
