@@ -17,7 +17,7 @@ def synthetic_frame(offset: float, stamp: float) -> HandFrame:
     points=tuple((0.01*(i%4),0.02*(i//4),0.002*i) for i in range(21))
     return HandFrame("right",(0.2+offset,1.0,0.3),(0.0,0.0,0.0,1.0),points,stamp)
 def main(argv: list[str] | None=None) -> int:
-    parser=argparse.ArgumentParser(prog="fr5-vr"); sub=parser.add_subparsers(dest="command",required=True)
+    parser=argparse.ArgumentParser(prog="fairino-fr5-teleop-sim"); sub=parser.add_subparsers(dest="command",required=True)
     for name in ("demo","listen","replay","probe-fr5"):
         item=sub.add_parser(name); item.add_argument("--config",type=Path,default=ROOT/"config"/"teleop.yaml")
         if name=="listen":

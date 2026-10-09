@@ -31,7 +31,7 @@ commands resolve it relative to this repository root; no sibling checkout is
 part of the execution chain.
 
 The repository boundary is intentional: reference projects outside
-`fairino-fr5-vr/` may be inspected for comparison, but code, models, build
+`fairino-fr5-teleop-sim/` may be inspected for comparison, but code, models, build
 scripts and configuration needed at runtime must be copied or implemented
 inside this tree. `make check` runs `scripts/check_portability.py` to reject
 machine-specific paths, external symlinks and missing bundled dependencies.

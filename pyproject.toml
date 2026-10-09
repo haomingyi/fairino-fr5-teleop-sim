@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fairino-fr5-vr"
+name = "fairino-fr5-teleop-sim"
 version = "0.1.0"
 description = "Safety-gated Quest 3 teleoperation bridge for FAIRINO FR5 and IH01"
 requires-python = ">=3.10"
@@ -14,7 +14,7 @@ dev = ["pytest>=7.4"]
 sim = ["mujoco>=3.2", "numpy>=1.24"]
 
 [project.scripts]
-fr5-vr = "fairino_fr5_vr.cli:main"
+fairino-fr5-teleop-sim = "fairino_fr5_vr.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -12,7 +12,7 @@ OpenXR 手部关键点用于控制 IH01 的六个主动通道。
 ## 快速开始（不连接硬件）
 
 ```bash
-cd fairino-fr5-vr
+cd fairino-fr5-teleop-sim
 make setup       # 首次安装
 make arm-sim     # 单独打开 FR5 + IH01 仿真
 ```
@@ -74,7 +74,7 @@ FR5 六轴 IK”，J2/J3 会为完成末端目标而联动，不是与人体肩�
 `make install` 才会把 APK 安装到 Quest 3；`make reverse` 不安装程序，只建立电脑与头显之间的 `localhost:8000` 通道。首次使用请在手机 Meta Horizon App 开启开发者模式，用 USB-C 连接并解锁 Quest 3，在头显弹窗中允许 USB 调试并勾选始终允许。
 
 ```bash
-cd fairino-fr5-vr/IPE-quest-hand-teleop
+cd fairino-fr5-teleop-sim/IPE-quest-hand-teleop
 make status      # 检查 adb 授权，必须显示 device
 make install     # 安装 hand_tracking_streamer.apk
 make reverse     # 建立 TCP 端口转发，不会再次安装 APK
